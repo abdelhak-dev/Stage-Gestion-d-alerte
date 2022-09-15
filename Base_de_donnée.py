@@ -48,9 +48,10 @@ def createBase():
 
     c = conn.cursor()
     c.execute('''CREATE TABLE Capteurs(
-                                    SensorName VARCHAR(21) NOT NULL ,
-                                    Type   VARCHAR(21) NOT NULL ,
                                     SensorID     INT NOT NULL PRIMARY KEY,
+                                    SensorRef VARCHAR(21) NOT NULL ,
+                                    Type   VARCHAR(21) NOT NULL ,
+                                    Stat   VARCHAR(21) NOT NULL ,
                                     Temperature REAL ,
                                     Humidity REAL ,
                                     Date   TEXT);''')
@@ -66,63 +67,78 @@ def createBase():
     conn.close()
 
 #Table Capteurs
-def addCapteur(Sensor:str,Type:str,SensorID:int):
-    if type(Sensor) != type("str"):return {"code":404,"error": "SensorName not correct"}
-    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
+def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
+    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
+    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
+
     with connection_DBase() as conn:
         try:
             c = conn.cursor()
-            rSQL = ''' DELETE FROM Capteurs WHERE SensorName = '{}', Type = '{}', SensorID='{}';'''
-            c.execute(rSQL.format(Sensor,Type,SensorID))
+            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}';'''
+            c.execute(rSQL.format(SensorID,SensorRef,Type))
             conn.commit()
-            return {"code": 200, "AddingSensor": Sensor , "AddingSensorType": Type, "SensorID": Type}
+            return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
         except:
-            rSQL = ''' INSERT INTO Capteurs (SensorName, Type, SensorID) VALUES ('{}','{}','{}');'''
-            c.execute(rSQL.format(Sensor, Type,SensorID))
+            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef, Type) VALUES ('{}','{}','{}');'''
+            c.execute(rSQL.format(SensorID,SensorRef, Type))
             conn.commit()
-            return {"code": 200, "Sensor": Sensor , "Type":Type, "SensorID": SensorID}
+            return {"code": 200, "SensorID": SensorID,"Sensor": SensorRef , "Type":Type}
 
-def modifSensor(Sensor:str,Type:str,SensorID:int):
-    if type(Sensor) != type("str"):return {"code":404,"error": "Sensor not correct"}
-    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
+def modifSensorRef(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
+    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
+    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
     with connection_DBase() as conn:
         c = conn.cursor()
-        rSQL = ''' UPDATE Capteurs SET SensorName ='{}' 
+        rSQL = ''' UPDATE Capteurs SET SensorRef ='{}' 
                                                 WHERE Type = '{}' AND SensorID = '{}';'''
-        c.execute(rSQL.format(Sensor,Type,SensorID))
+        c.execute(rSQL.format(SensorRef,Type,SensorID))
         conn.commit()
-        return {"code": 200, "ModifiedSensor": Sensor}
+        return {"code": 200, "ModifiedSensor": SensorRef}
 
-def modifType(Sensor:str,Type:str,SensorID:int):
-    if type(Sensor) != type("str"):return {"code":404,"error": "Sensor not correct"}
-    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
-    if type(SensorID) != type(3): return {"code": 404, "error": "Type not correct"}
-    with connection_DBase() as conn:
-        c = conn.cursor()
-        rSQL = ''' UPDATE Capteurs SET Type ='{}' 
-                                    WHERE SensorName = '{}' AND SensorID = '{}' ;'''
-        c.execute(rSQL.format(Type,Sensor,SensorID))
-        conn.commit()
-        return {"code": 200, "ModifiedType": Type}
-
-def modifType(Sensor:str,Type:str,SensorID:int):
-    if type(Sensor) != type("str"):return {"code":404,"error": "Sensor not correct"}
-    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
+def modifType(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
+    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
+    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
     with connection_DBase() as conn:
         c = conn.cursor()
         rSQL = ''' UPDATE Capteurs SET Type ='{}' 
-                                    WHERE SensorName = '{}' AND SensorID = '{}';'''
-        c.execute(rSQL.format(Type,Sensor,SensorID))
+                                    WHERE SensorRef = '{}' AND SensorID = '{}' ;'''
+        c.execute(rSQL.format(Type,SensorRef,SensorID))
         conn.commit()
         return {"code": 200, "ModifiedType": Type}
+
+def modifType(SensorID:int,SensorRef:str,Type:str):
+    if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
+    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
+    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
+
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        rSQL = ''' UPDATE Capteurs SET Type ='{}' 
+                                    WHERE SensorRef = '{}' AND SensorID = '{}';'''
+        c.execute(rSQL.format(Type,SensorRef,SensorID))
+        conn.commit()
+        return {"code": 200, "ModifiedType": Type}
+
+
+def availableSensors():
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        try:
+            rSQL = ''' SELECT * FROM Capteur ORDER BY SensorID DESC;'''
+            c.execute(rSQL)
+            element= c.fetchall()
+            conn.commit()
+            return {"code": 200, "Element Found": element[0][0]}
+        except:
+            return {"Code": 404, "Element":None}
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
-def TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
-    if type(Sensor) != str(): return {"code": 404, "error": " Sensor not correct"}
+def TemperatureHumidity(SensorRef:str,SensorID:int,Temperature:float,Humidity:float):
     if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
     if type(Temperature) != float(): return {"code":404,"error": "Value Sensor not correct"}
     if type(Humidity)    != float(): return {"code": 404, "error": "Value Sensor not correct"}
 
@@ -130,8 +146,8 @@ def TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float
         c = conn.cursor()
         try:
             rSQL = ''' UPDATE Capteurs SET Temperature ='{}', Humidity = '{}'
-                                WHERE SensorName ='{}' AND SensorID ='{}'; '''
-            c.execute(rSQL.format(Temperature,Humidity,Sensor,SensorID))
+                                WHERE SensorRef ='{}' AND SensorID ='{}'; '''
+            c.execute(rSQL.format(Temperature,Humidity,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
             return {"code": 200}
@@ -271,6 +287,7 @@ ddate() """
 #addCapteur("ZEGBEE","Ultrasonic",4)
 #ddate()
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
+#availableSensors()
 #test de l'ajout d'un alerte
 #Alert("Temperature",1,'Fatal',"Admin@gmail.com")
 #AlertDangerModif("Temperature","LOW","2022-09-13 09:42:29.947286")

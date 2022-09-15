@@ -16,6 +16,8 @@ def edit_SensorName(Sensor:str,Type:str):
 def edit_SensorType(Sensor:str,Type:str):
     return modifType(Sensor,Type)
 
+#Afficher le réseau de capteurs connecté
+
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
 def set_Threshold(Sensor:str,Date:str,Temperature,Humidity):
     return TemperatureHumidity(Sensor,Date,Temperature,Humidity)
