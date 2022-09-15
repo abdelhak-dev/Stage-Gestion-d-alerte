@@ -51,7 +51,7 @@ def createBase():
                                     SensorID     INT NOT NULL PRIMARY KEY,
                                     SensorRef VARCHAR(21) NOT NULL ,
                                     Type   VARCHAR(21) NOT NULL ,
-                                    Stat   VARCHAR(21) NOT NULL ,
+                                    State   VARCHAR(21) NOT NULL,
                                     Temperature REAL ,
                                     Humidity REAL ,
                                     Date   TEXT);''')
@@ -75,13 +75,13 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
     with connection_DBase() as conn:
         try:
             c = conn.cursor()
-            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}';'''
+            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}'; '''
             c.execute(rSQL.format(SensorID,SensorRef,Type))
             conn.commit()
             return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
         except:
-            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef, Type) VALUES ('{}','{}','{}');'''
-            c.execute(rSQL.format(SensorID,SensorRef, Type))
+            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}');'''
+            c.execute(rSQL.format(SensorID,SensorRef,Type))
             conn.commit()
             return {"code": 200, "SensorID": SensorID,"Sensor": SensorRef , "Type":Type}
 
@@ -136,24 +136,40 @@ def availableSensors():
             return {"Code": 404, "Element":None}
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
-def TemperatureHumidity(SensorRef:str,SensorID:int,Temperature:float,Humidity:float):
+def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
     if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
     if type(Temperature) != float(): return {"code":404,"error": "Value Sensor not correct"}
-    if type(Humidity)    != float(): return {"code": 404, "error": "Value Sensor not correct"}
 
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
-            rSQL = ''' UPDATE Capteurs SET Temperature ='{}', Humidity = '{}'
+            rSQL = ''' UPDATE Capteurs SET Temperature ='{}'
                                 WHERE SensorRef ='{}' AND SensorID ='{}'; '''
-            c.execute(rSQL.format(Temperature,Humidity,SensorRef,SensorID))
+            c.execute(rSQL.format(Temperature,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
             return {"code": 200}
         except:
             return {"Code": 404}
 
+
+def SetHumidity(SensorRef:str,SensorID:int,Humidity:float):
+    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
+    if type(Humidity)    != float(): return {"code": 404, "error": "Value Sensor not correct"}
+
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        try:
+            rSQL = ''' UPDATE Capteurs SET Humidity ='{}'
+                                WHERE SensorRef ='{}' AND SensorID ='{}'; '''
+            c.execute(rSQL.format(Humidity,SensorRef,SensorID))
+            conn.commit()
+            #print(Temperature, Humidity, Sensor, SensorID)
+            return {"code": 200}
+        except:
+            return {"Code": 404}
 
 
 """def getvalue1()
@@ -165,6 +181,18 @@ def getvalue2()
 ##fonction qui prend la valeur receptionnée par HTTP
 ###Et la mets dans value2 de tableau capteurs
     pass"""
+
+def SensorState(SensorID:int,SensorRef:str,State:str):
+    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
+    if type(State) != str():return {"code": 404, "error": " State not correct"}
+    #if State != "ON" or "OFF" : return {"code": 404, "error": " State should be ONLY ON or OFF"}
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        rSQL = ''' UPDATE Capteurs SET State ='{}' WHERE SensorID = '{}' AND SensorRef = '{}';'''
+        c.execute(rSQL.format(State,SensorID,SensorRef))
+        conn.commit()
+        return "state changed to '{}'".format(State)
 
 #c'était qu'une fonction de test pour tester l'ajout de la date
 #dans la base de donnée
@@ -183,22 +211,17 @@ def ddate():
             conn.commit()
             return {"code": 200}
 
-
-def ThresholdTemp():
-    global compare
-    #Comparaison les valeur de temperature dans une plage
+def sort_Temperature():
+    values = []
     with connection_DBase() as conn:
         c = conn.cursor()
-        try:
-            rSQL='''SELECT Temperature FROM Capteurs ORDER BY Temperature ASC LIMIT 1'''
-            c.execute(rSQL)
-            conn.commit()
-            compare = c.fetchone()
-            return {"Temperature":compare[0][0]}
-        except:
-            return {"code":404,"error":"not recorded"}
-    return compare
-
+        rSQL='''SELECT Temperature FROM Capteurs ORDER BY Temperature DESC'''
+        c.execute(rSQL)
+        itemlist = c.fetchall()
+        for item in itemlist:
+            values[item] = itemlist[item]
+            item+=1
+            return values
 """
 def alertCondition():
     with connection_DBase() as conn:
@@ -284,7 +307,8 @@ fillTemperature(25)
 fillHumidity(25)
 ddate() """
 
-#addCapteur("ZEGBEE","Ultrasonic",4)
+#addCapteur(1,"ZEGBEE","Ultrasonic")
+#SensorState(1,"ZEGBEE","ON")
 #ddate()
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 #availableSensors()
