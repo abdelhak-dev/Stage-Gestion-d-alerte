@@ -20,12 +20,12 @@ tags_metadata = [
     },
 
      {
-        "name": "Set & Get Functions:",
-        "description": "Get information about the Server Room : Temperature, Humidity, History Acces, History of Alerts",
+        "name": "Edit Functions:",
+        "description": "Edit argument in DB such as : SensorRef, SensorType, Temperature, Humidity, History Acces, History of Alerts",
     },
     {
         "name": "Get & Responses :",
-        "description": "Get response for the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts ex:get_acces_history/{ii}.",
+        "description": "Get response from the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts ex:get_acces_history/{ii}.",
         "externalDocs": {
             "description": "The local API URL's ",
             "url": "http://127.0.0.3:8000/",
