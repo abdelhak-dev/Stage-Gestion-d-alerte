@@ -73,18 +73,17 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
 
     with connection_DBase() as conn:
-        #try:
-        c = conn.cursor()
-        rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
-        c.execute(rSQL.format(SensorID,SensorRef,Type))
-        conn.commit()
-        return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
-        #except:
-        """
+        try:
+            c = conn.cursor()
             rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}';'''
             c.execute(rSQL.format(SensorID,SensorRef,Type))
             conn.commit()
-            return {"code": 200, "SensorID": SensorID,"Sensor": SensorRef , "Type":Type}"""
+            return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
+        except:
+            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
+            c.execute(rSQL.format(SensorID,SensorRef,Type))
+            conn.commit()
+            return {"code": 404, "Exesting SensorID": SensorID,"Sensor": SensorRef , "Type":Type}
 
 def modifSensorRef(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
@@ -150,7 +149,7 @@ def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
             c.execute(rSQL.format(Temperature,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
-            return {"code": 200}
+            return {"code": 200, "TemperatureCondition is:":Temperature}
         except:
             return {"Code": 404}
 
@@ -168,7 +167,7 @@ def SetHumidity(SensorRef:str,SensorID:int,Humidity:float):
             c.execute(rSQL.format(Humidity,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
-            return {"code": 200}
+            return {"code": 200, "HumidityCondition is":Humidity}
         except:
             return {"Code": 404}
 
@@ -194,7 +193,7 @@ def SensorState(SensorID:int,State:str):
                         WHERE SensorID ='{}';'''
         c.execute(rSQL.format(State,SensorID))
         conn.commit()
-        return {"code": 200}
+        return {"code": 200, "State": State}
         #return "state changed to '{}'".format(State)
 
 #c'était qu'une fonction de test pour tester l'ajout de la date
@@ -310,12 +309,13 @@ fillTemperature(25)
 fillHumidity(25)
 ddate() """
 
-#addCapteur(1,"IOT","Ultrasonic")
-#SensorState(1,"ON")
-#ddate()
+#addCapteur(3,"PIR","Mouvement") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+SensorState(3,"No Presence")
+ddate()
+#SetTemperature("DHT11",2,50.5)
+#SetHumidity("DHT11",2,80.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
-SetTemperature("IOT",1,30.00)
-SetHumidity("IOT",1,80.00)
+
 #availableSensors()
 #test de l'ajout d'un alerte
 #Alert("Temperature",1,'Fatal',"Admin@gmail.com")
