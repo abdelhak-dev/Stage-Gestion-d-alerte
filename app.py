@@ -61,17 +61,17 @@ async def root():
 # exemple: verbe/{argument1}/{arguemnt2}
 
 #Add Capteur
-@add.get('/add_Sensor/{Sensor}/{Type}/{SensorID}',tags=["Set & Add functions"])
+@app.get('/add_Sensor/{Sensor}/{Type}/{SensorID}',tags=["Set & Add functions"])
 async def Add_Sensor(Sensor:str,Type:str,SensorID:int):
     return add_Sensor(Sensor,Type,SensorID)
 
 #Modification nom ou type du capteur
-@add.get('edit_ref/{Sensor}/{Type}',tags=["Set & Add functions"])
+@app.get('edit_ref/{Sensor}/{Type}',tags=["Set & Add functions"])
 async def Edit_Sensor_Ref(Sensor:str,Type:str):
     return edit_SensorName(Sensor,Type)
 
 #Modification type du capteur
-@add.get('edit_sensor_type/{Sensor}/{Type}',tags=["Set & Add functions"])
+@app.get('edit_sensor_type/{Sensor}/{Type}',tags=["Set & Add functions"])
 async def Edit_Sensor_Type(Sensor:str,Type:str):
     return edit_SensorType(Sensor,Type)
 
@@ -93,7 +93,7 @@ async def Get_alert_history():
 
 
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
-@dd.get('setTempHumid/{T}/{}',tags=["Set & Add functions"])
+@app.get('setTempHumid/{T}/{}',tags=["Set & Add functions"])
 async def SetTempHumid(Sensor:str,Date:str,Temperature,Humidity):
     return set_Threshold(Sensor,Date,Temperature,Humidity)
 
