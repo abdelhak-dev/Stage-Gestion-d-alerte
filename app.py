@@ -24,8 +24,8 @@ tags_metadata = [
         "description": "Edit argument in DB such as : SensorRef, SensorType, Temperature, Humidity, History Acces, History of Alerts",
     },
     {
-        "name": "Get & Responses :",
-        "description": "Get response from the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts ex:get_acces_history/{ii}.",
+        "name": "Get Response:",
+        "description": "Get response from the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts and Acces ex: get_acces_history/{ii}.",
         "externalDocs": {
             "description": "The local API URL's ",
             "url": "http://127.0.0.3:8000/",
@@ -50,7 +50,7 @@ Ce fichier représente la partie apparant de l'ice-berg API, qui a pour racine f
 # message d'entée de l'api
 @app.get("/", tags=['Welcome'])
 async def root():
-    return {"Project": " Welcome to Server Room !"}
+    return {"Project": " Welcome to The Server Room ! To acces add '/docs' query after API URL"}
 
 
 ### Add_functions tag:
@@ -66,26 +66,26 @@ async def Add_Sensor(Sensor:str,Type:str,SensorID:int):
     return add_Sensor(Sensor,Type,SensorID)
 
 #Modification nom ou type du capteur
-@app.get('edit_ref/{Sensor}/{Type}',tags=["Set & Add functions"])
+@app.get('edit_ref/{Sensor}/{Type}',tags=["Edit Functions"])
 async def Edit_Sensor_Ref(Sensor:str,Type:str):
     return edit_SensorName(Sensor,Type)
 
 #Modification type du capteur
-@app.get('edit_sensor_type/{Sensor}/{Type}',tags=["Set & Add functions"])
+@app.get('edit_sensor_type/{Sensor}/{Type}',tags=["Edit Functions"])
 async def Edit_Sensor_Type(Sensor:str,Type:str):
     return edit_SensorType(Sensor,Type)
 
 # get accès on aura le choix entre selectionner une période spécifique
 ## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
 ###
-@app.get('get_acces_history/',tags=["Set & Add functions"])
+@app.get('get_acces_history/',tags=["Get Response"])
 async def Get_acces_history():
     return
 
 # get Alert history : On aura le choix entre selectionner une période spécifique
 ## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
 ###
-@app.get('get_alert_history/',tags=["Set & Add functions"])
+@app.get('get_alert_history/',tags=["Get Response"])
 async def Get_alert_history():
     return
 
@@ -115,7 +115,7 @@ async def SetTempHumid(Sensor:str,Date:str,Temperature,Humidity):
 
 
 
-
+"""
 # Créer une route dans l'api qui ajoute un patient dans la base de données avec les paramètres d'entrées : room,ID,week
 # exemple: verbe/{argument1}/{arguemnt2}
 @app.get('/addPatient/{room}/{patientID}/{week}', tags=["Set & Add functions"])
@@ -238,3 +238,4 @@ async def getStats(room: int):
 async def getHistory(robot:int =0):
     return load_getHistory(robot)
 
+"""
