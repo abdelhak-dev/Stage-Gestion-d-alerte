@@ -48,17 +48,17 @@ def createBase():
 
     c = conn.cursor()
     c.execute('''CREATE TABLE Capteurs(
-                                    SensorID     INT NOT NULL PRIMARY KEY,
+                                    SensorID     INTEGER PRIMARY KEY,
                                     SensorRef VARCHAR(21) NOT NULL ,
                                     Type   VARCHAR(21) NOT NULL ,
-                                    State   VARCHAR(21) NOT NULL,
+                                    State   VARCHAR(21),
                                     Temperature REAL ,
                                     Humidity REAL ,
                                     Date   TEXT);''')
 
     c.execute('''CREATE TABLE Alerte(
         AlertSubject VARCHAR(21) NOT NULL,
-        SensorID    INT,
+        SensorID    INTEGER NOT NULL,
         DangerType VARCHAR(21) NOT NULL,
         DestinationEmail VARCHAR(21) NOT NULL,
         Date   TEXT,
@@ -73,17 +73,18 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
 
     with connection_DBase() as conn:
-        try:
-            c = conn.cursor()
-            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}'; '''
+        #try:
+        c = conn.cursor()
+        rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
+        c.execute(rSQL.format(SensorID,SensorRef,Type))
+        conn.commit()
+        return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
+        #except:
+        """
+            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}';'''
             c.execute(rSQL.format(SensorID,SensorRef,Type))
             conn.commit()
-            return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
-        except:
-            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}');'''
-            c.execute(rSQL.format(SensorID,SensorRef,Type))
-            conn.commit()
-            return {"code": 200, "SensorID": SensorID,"Sensor": SensorRef , "Type":Type}
+            return {"code": 200, "SensorID": SensorID,"Sensor": SensorRef , "Type":Type}"""
 
 def modifSensorRef(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
@@ -182,17 +183,19 @@ def getvalue2()
 ###Et la mets dans value2 de tableau capteurs
     pass"""
 
-def SensorState(SensorID:int,SensorRef:str,State:str):
-    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
-    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
-    if type(State) != str():return {"code": 404, "error": " State not correct"}
+def SensorState(SensorID:int,State:str):
+    if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
+    #if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
+    if type(State) != type("ON"):return {"code": 404, "error": " State not correct"}
     #if State != "ON" or "OFF" : return {"code": 404, "error": " State should be ONLY ON or OFF"}
     with connection_DBase() as conn:
         c = conn.cursor()
-        rSQL = ''' UPDATE Capteurs SET State ='{}' WHERE SensorID = '{}' AND SensorRef = '{}';'''
-        c.execute(rSQL.format(State,SensorID,SensorRef))
+        rSQL = ''' UPDATE Capteurs SET State='{}' 
+                        WHERE SensorID ='{}';'''
+        c.execute(rSQL.format(State,SensorID))
         conn.commit()
-        return "state changed to '{}'".format(State)
+        return {"code": 200}
+        #return "state changed to '{}'".format(State)
 
 #c'était qu'une fonction de test pour tester l'ajout de la date
 #dans la base de donnée
@@ -307,8 +310,8 @@ fillTemperature(25)
 fillHumidity(25)
 ddate() """
 
-#addCapteur(1,"ZEGBEE","Ultrasonic")
-#SensorState(1,"ZEGBEE","ON")
+#addCapteur(1,"IOT","Ultrasonic")
+#SensorState(1,"ON")
 #ddate()
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 #availableSensors()
