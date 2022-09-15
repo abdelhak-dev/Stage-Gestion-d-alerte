@@ -25,9 +25,9 @@ tags_metadata = [
     },
     {
         "name": "Get Response:",
-        "description": "Get response from the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts and Acces ex: get_acces_history/{ii}.",
+        "description": "Get response from API about:Temperature,Humidity, HistoryAcces,History of Alerts,Acces.",
         "externalDocs": {
-            "description": "The local API URL's ",
+            #"description": "The local API URL's ",
             "url": "http://127.0.0.3:8000/",
         },
     },
