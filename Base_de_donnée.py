@@ -138,9 +138,9 @@ def availableSensors():
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
 def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
-    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
-    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
-    if type(Temperature) != float(): return {"code":404,"error": "Value Sensor not correct"}
+    if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
+    if type(Temperature) != type(10.00): return {"code":404,"error": "Value Sensor not correct"}
 
     with connection_DBase() as conn:
         c = conn.cursor()
@@ -156,9 +156,9 @@ def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
 
 
 def SetHumidity(SensorRef:str,SensorID:int,Humidity:float):
-    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
-    if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
-    if type(Humidity)    != float(): return {"code": 404, "error": "Value Sensor not correct"}
+    if type(SensorID) != type(2): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorRef) != type("RHK-3O0"): return {"code": 404, "error": " SensorRef not correct"}
+    if type(Humidity)    != type(20.00): return {"code": 404, "error": "Value Sensor not correct"}
 
     with connection_DBase() as conn:
         c = conn.cursor()
@@ -314,6 +314,8 @@ ddate() """
 #SensorState(1,"ON")
 #ddate()
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
+SetTemperature("IOT",1,30.00)
+SetHumidity("IOT",1,80.00)
 #availableSensors()
 #test de l'ajout d'un alerte
 #Alert("Temperature",1,'Fatal',"Admin@gmail.com")
