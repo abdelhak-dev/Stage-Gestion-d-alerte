@@ -12,37 +12,37 @@ import json
 tags_metadata = [
     {
         "name": "Welcome:",
-        "description": "Welcome ! ENjoy our work 😉✌️  ",
+        "description": "Welcome ! ENjoy the work ✌",
     },
     {
         "name": "Set & Add Functions :",
-        "description": "Add a patient or a medicine or a robot ID ",
+        "description": "Add a Sensor with Reference and his function Or Set Alert Condition : Temperature and Humidity",
     },
 
      {
-        "name": "Set & Get Functions Robot_Side :",
-        "description": "Main communication function's Robot/API or API/Robot ",
+        "name": "Set & Get Functions:",
+        "description": "Get information about the Server Room : Temperature, Humidity, History Acces, History of Alerts",
     },
     {
         "name": "Get & Responses :",
-        "description": "get a response by the api, ex:getOrder/{room}.",
+        "description": "Get response for the API about the Server Room : Temperature, Humidity, History Acces, History of Alerts ex:get_acces_history/{ii}.",
         "externalDocs": {
             "description": "The local API URL's ",
-            "url": "http://127.0.0.1:8000/",
+            "url": "http://127.0.0.3:8000/",
         },
     },
     {
         "name": "Statistic & Data Analysis Functions :",
-        "description": "Statistic of recovery and History of robot's medicine delivery",
+        "description": "Statistic of recovery and History of the Room Stat",
     },
 ]
 
-app = FastAPI(title="Cluster's_Robot API",version="1.5.0",description="Happy to share with you the fruit of a hard worker team  ✌️" ,openapi_tags=tags_metadata)
+app = FastAPI(title="Server Room API",version="1.5.0",description=" ✌️" ,openapi_tags=tags_metadata)
 
 
 '''
-Le fichier app contient les URI API pour les différentes requetes utiles pour notre projet robot.
-Ce fichier représente la partie apparant de l'ice-berg API, qui a pour racine le features et Base_de_données
+Le fichier app contient les URI API pour les différentes requetes utiles pour notre projet Server Room.
+Ce fichier représente la partie apparant de l'ice-berg API, qui a pour racine fichier features et Base_de_données
 
 '''
 
@@ -50,33 +50,47 @@ Ce fichier représente la partie apparant de l'ice-berg API, qui a pour racine l
 # message d'entée de l'api
 @app.get("/", tags=['Welcome'])
 async def root():
-    return {"Project": " Hello cluster_robot !"}
+    return {"Project": " Welcome to Server Room !"}
 
 
 ### Add_functions tag:
 ##
 #
 
-# Créer une route dans l'api qui renvoi un  médicament avec son ID et son nom
+# Créer une route dans l'api qui renvoi un Capteur avec son nom,Type et son ID
 # exemple: verbe/{argument1}/{arguemnt2}
-@app.get('/setMedicine/{MedicineID}/{MedicineName}', tags=["Set & Add functions"])
-async def add_medicine(MedicineID: int, MedicineName: str):
-    return load_setMedicine(MedicineID, MedicineName)
 
 #Add Capteur
-@add.get('/add_Sensor/{Sensor}/{Type}',tags=["Set & Add functions"])
-async def Add_Sensor(Sensor:str,Type:str):
-    return add_Sensor(Sensor,Type)
+@add.get('/add_Sensor/{Sensor}/{Type}/{SensorID}',tags=["Set & Add functions"])
+async def Add_Sensor(Sensor:str,Type:str,SensorID:int):
+    return add_Sensor(Sensor,Type,SensorID)
 
 #Modification nom ou type du capteur
 @add.get('edit_ref/{Sensor}/{Type}',tags=["Set & Add functions"])
 async def Edit_Sensor_Ref(Sensor:str,Type:str):
-    return modifSensor(Sensor,Type)
+    return edit_SensorName(Sensor,Type)
 
 #Modification type du capteur
 @add.get('edit_sensor_type/{Sensor}/{Type}',tags=["Set & Add functions"])
 async def Edit_Sensor_Type(Sensor:str,Type:str):
-    return modifType(Sensor,Type)
+    return edit_SensorType(Sensor,Type)
+
+# get accès on aura le choix entre selectionner une période spécifique
+## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
+###
+@app.get('get_acces_history/',tags=["Set & Add functions"])
+async def Get_acces_history():
+    return
+
+# get Alert history : On aura le choix entre selectionner une période spécifique
+## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
+###
+@app.get('get_alert_history/',tags=["Set & Add functions"])
+async def Get_alert_history():
+    return
+
+
+
 
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
 @dd.get('setTempHumid/{T}/{}',tags=["Set & Add functions"])
@@ -84,6 +98,21 @@ async def SetTempHumid(Sensor:str,Date:str,Temperature,Humidity):
     return set_Threshold(Sensor,Date,Temperature,Humidity)
 
 #Record date
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

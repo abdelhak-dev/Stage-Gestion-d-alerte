@@ -5,8 +5,8 @@ import requests
 
 
 #ajout d'un capteur
-def add_Sensor(Sensor:str,Type:str):
-    return addCapteur(Sensor,Type)
+def add_Sensor(Sensor:str,Type:str,SensorID:int):
+    return addCapteur(Sensor,Type,SensorID)
 
 #Modification nom ou type du capteur
 def edit_SensorName(Sensor:str,Type:str):

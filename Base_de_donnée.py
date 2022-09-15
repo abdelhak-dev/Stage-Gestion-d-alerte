@@ -270,7 +270,7 @@ ddate() """
 
 #addCapteur("ZEGBEE","Ultrasonic",4)
 #ddate()
-TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
+#TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 #test de l'ajout d'un alerte
 #Alert("Temperature",1,'Fatal',"Admin@gmail.com")
 #AlertDangerModif("Temperature","LOW","2022-09-13 09:42:29.947286")
