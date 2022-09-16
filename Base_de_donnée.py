@@ -141,7 +141,7 @@ def availableSensors():
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
 def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
-    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
     if type(Temperature) != type(10.00): return {"code":404,"error": "Value Sensor not correct"}
 
@@ -305,17 +305,13 @@ if __name__=='__main__':  #'__Base_de_donnée__'
     __test__()
 
 #test de l'ajout sensor et type:
-"""
-addCapteur("HCR","Ultrasonic") #ça fonctionne
-fillTemperature(25)
-fillHumidity(25)
-ddate() """
+
 #Idverif(1)
-addCapteur(6,"new","Story") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
-#SensorState(3,"No Presence")
+#addCapteur(1,"DHT22","Temp&Humid") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+#SensorState(1,"ON")
 #ddate()
-#SetTemperature("DHT11",2,50.5)
-#SetHumidity("DHT11",2,80.00)
+SetTemperature("DHT22",1,50.5)
+#SetHumidity("DHT22",1,80.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 
 #availableSensors()
