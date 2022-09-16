@@ -72,18 +72,22 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
     if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
 
+
     with connection_DBase() as conn:
         try:
-            c = conn.cursor()
-            rSQL = ''' DELETE FROM Capteurs WHERE SensorID = '{}', SensorRef = '{}', Type = '{}';'''
-            c.execute(rSQL.format(SensorID,SensorRef,Type))
-            conn.commit()
-            return {"code": 200, "SensorID": Type,"AddingSensor": SensorRef , "AddingSensorType": Type}
-        except:
+            #Idverif(SensorID)
+            c=conn.cursor()
             rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
-            c.execute(rSQL.format(SensorID,SensorRef,Type))
+            c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
-            return {"code": 404, "Exesting SensorID": SensorID,"Sensor": SensorRef , "Type":Type}
+            print({"code": 404, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type})
+
+        except:
+            rSQL = ''' UPDATE Capteurs SET SensorID = '{}', SensorRef='{}',Type='{}'
+                        WHERE SensorID= '{}';'''
+            c.execute(rSQL.format(SensorID,SensorRef,Type,SensorID))
+            conn.commit()
+            print({"code": 200, "Updating with SensorID": SensorID, "New SensorReference": SensorRef, "New SensorType": Type})
 
 def modifSensorRef(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
@@ -137,7 +141,7 @@ def availableSensors():
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
 def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
-    if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
+    if type(SensorID) != int(): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
     if type(Temperature) != type(10.00): return {"code":404,"error": "Value Sensor not correct"}
 
@@ -224,21 +228,18 @@ def sort_Temperature():
             values[item] = itemlist[item]
             item+=1
             return values
-"""
-def alertCondition():
+
+def Idverif(SensorID:int):
     with connection_DBase() as conn:
         c = conn.cursor()
-        rSQL = '''SELECT SensorID FROM Capteurs 
-                    WHERE Sensor ID MAX(30) ; ''' #Je veux selectionner les SensorID selon une plage de temperature
+        rSQL = ''' SELECT COUNT(*) FROM Capteurs WHERE SensorID ='{}' ;'''
+        c.execute(rSQL.format(SensorID))
+        catch = c.fetchall()
+        if catch[0][0] == SensorID:
+            #return{"error":"The SensorID already exist !"}
+            print({"error":"The SensorID already exist !"})
         # 8°<Low<30, 30°<High<45, 50°<Fatal<60
-        c.execute(rSQL)
-        val = c.fetchall()
-        while val != []:
-            rSQL = ''' SELECT medicineID FROM HISTORICORDER where orderID = {} ;'''
-            c.execute(rSQL.format(val[0][0]))
-            val2 = c.fetchone()
-        print(val)
-"""
+
 
 
 
@@ -261,7 +262,7 @@ def Alert(AlertSubject:str,SensorID:int,DangerType:str,Destination):
             conn.commit()
 
             return {"code": 200}
-        except:
+        except Error:
             rSQL = '''UPDATE Alerte SET AlertSubject ='{}',DangerType='{}',DestinationEmail='{}',Date='{}';'''
             c.execute(rSQL.format(AlertSubject, DangerType, Destination, Date))
             conn.commit()
@@ -299,6 +300,7 @@ def __test__():
         createBase()
     else:
         print("..", "la base existe")
+
 if __name__=='__main__':  #'__Base_de_donnée__'
     __test__()
 
@@ -308,10 +310,10 @@ addCapteur("HCR","Ultrasonic") #ça fonctionne
 fillTemperature(25)
 fillHumidity(25)
 ddate() """
-
-#addCapteur(3,"PIR","Mouvement") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
-SensorState(3,"No Presence")
-ddate()
+#Idverif(1)
+addCapteur(6,"new","Story") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+#SensorState(3,"No Presence")
+#ddate()
 #SetTemperature("DHT11",2,50.5)
 #SetHumidity("DHT11",2,80.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
