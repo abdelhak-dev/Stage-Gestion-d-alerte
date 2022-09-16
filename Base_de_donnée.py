@@ -80,7 +80,7 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
             rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
             c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
-            print({"code": 404, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type})
+            print({"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type})
 
         except:
             rSQL = ''' UPDATE Capteurs SET SensorID = '{}', SensorRef='{}',Type='{}'
@@ -307,11 +307,11 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #test de l'ajout sensor et type:
 
 #Idverif(1)
-#addCapteur(1,"DHT22","Temp&Humid") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
-#SensorState(1,"ON")
-#ddate()
-SetTemperature("DHT22",1,50.5)
-#SetHumidity("DHT22",1,80.00)
+addCapteur(2,"DHT22","Temp&Humid") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+SensorState(2,"ON")
+ddate()
+SetTemperature("DHT22",2,70.5)
+SetHumidity("DHT22",2,85.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 
 #availableSensors()
