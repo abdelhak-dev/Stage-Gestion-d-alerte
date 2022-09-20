@@ -64,6 +64,11 @@ def createBase():
         DestinationEmail VARCHAR(21) NOT NULL,
         Date   TEXT,
         FOREIGN KEY(SensorID) REFERENCES Capteurs(SensorID));''')
+
+    c.execute('''CREATE TABLE HistoryRoomIn(
+            Presence VARCHAR(21) NOT NULL,
+            Date   TEXT,
+            FOREIGN KEY(Presence) REFERENCES Capteurs(Presence));''')
     conn.commit()
     conn.close()
 
