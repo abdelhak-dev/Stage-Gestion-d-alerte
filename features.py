@@ -24,6 +24,10 @@ def Update_TempHumid(SensorRef:str,SensorID:int,Temperature:float,Humidity:float
     humid = UpdateHumidity(SensorRef,SensorID,Humidity)
     return temp,humid
 
+#update la Presence dans la salle si il ya quelqun ou pas
+def Update_Presence(SensorRef:str,SensorID:int,Presence:str):
+    return UpdatePresence(SensorRef,SensorID,Presence)
+
 #Record Date
 def Record_Date():
     return ddate()

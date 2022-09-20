@@ -54,6 +54,7 @@ def createBase():
                                     State   VARCHAR(21),
                                     Temperature REAL ,
                                     Humidity REAL ,
+                                    Presence   VARCHAR(21),
                                     Date   TEXT);''')
 
     c.execute('''CREATE TABLE Alerte(
@@ -78,14 +79,14 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
             rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
             c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
-            print({"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type})
+            return {"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type}
 
         except:
             rSQL = ''' UPDATE Capteurs SET SensorID = '{}', SensorRef='{}',Type='{}',State= "OFF"
                         WHERE SensorID= '{}';'''
             c.execute(rSQL.format(SensorID,SensorRef,Type,SensorID))
             conn.commit()
-            print({"code": 200, "Updating with SensorID": SensorID, "New SensorReference": SensorRef, "New SensorType": Type})
+            return {"code": 200, "Updating with SensorID": SensorID, "New SensorReference": SensorRef, "New SensorType": Type}
 
 def modifSensorRef(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
@@ -149,10 +150,9 @@ def UpdateTemperature(SensorRef:str,SensorID:int,Temperature):
             c.execute(rSQL.format(Temperature,date,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
-            return {"code": 200, "TemperatureCondition is:":Temperature}
+            return {"code": 200, "Temperature Updated is:":Temperature}
         except:
             return {"Code": 404}
-
 
 def UpdateHumidity(SensorRef:str,SensorID:int,Humidity):
     if type(SensorID) != type(2): return {"code": 404, "error": " SensorID not correct"}
@@ -162,14 +162,28 @@ def UpdateHumidity(SensorRef:str,SensorID:int,Humidity):
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
-            rSQL = ''' UPDATE Capteurs SET Humidity ='{}',Date ='{}',State ='ON'
+            rSQL = ''' UPDATE Capteurs SET Humidity ='{}',Date ='{}', State ='ON'
                                 WHERE SensorRef ='{}' AND SensorID ='{}'; '''
             c.execute(rSQL.format(Humidity,date,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
-            return {"code": 200, "HumidityCondition is":Humidity}
+            return {"code": 200, "Humidity Updated is":Humidity}
         except:
             return {"Code": 404}
+
+def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
+    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
+    if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
+    if type(Presence) != type("str"): return {"code": 404, "error": "Presence not correct"}
+    date = datetime.now()
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL= ''' UPDATE Capteurs SET Presence ='{}',State ='ON',Date='{}'
+                    WHERE SensorID='{}' AND SensorRef='{}'; '''
+        c.execute(rSQL.format(Presence,date,SensorID,SensorRef))
+        conn.commit()
+    return {"code": 200, "Presence": Presence, "AT":date}
+
 
 
 """def getvalue1()
