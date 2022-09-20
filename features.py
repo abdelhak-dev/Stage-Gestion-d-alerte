@@ -5,23 +5,23 @@ import requests
 
 
 #ajout d'un capteur
-def add_Sensor(Sensor:str,Type:str,SensorID:int):
-    return addCapteur(Sensor,Type,SensorID)
+def add_Sensor(SensorID:int,SensorRef:str,Type:str):
+    return addCapteur(SensorID,SensorRef,Type)
 
 #Modification nom ou type du capteur
-def edit_SensorName(Sensor:str,Type:str):
-    return modifSensor(Sensor,Type)
+def edit_SensorRef(SensorID:int,SensorRef:str,Type:str): #modifSensorRef(SensorID:int,SensorRef:str,Type:str)
+    return modifSensorRef(SensorID,SensorRef,Type)
 
 #Modification type du capteur
-def edit_SensorType(Sensor:str,Type:str):
-    return modifType(Sensor,Type)
+def edit_SensorType(SensorID:int,SensorRef:str,Type:str): #modifType(SensorID:int,SensorRef:str,Type:str)
+    return modifType(SensorID,SensorRef,Type)
 
 #Afficher le réseau de capteurs connecté
 
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
-def set_Threshold(SensorRef:str,SensorID:int,Temperature:float,Humidity:float):
-    temp = SetTemperature(SensorRef,SensorID,Temperature)
-    humid = SetHumidity(SensorRef,SensorID,Humidity)
+def Update_TempHumid(SensorRef:str,SensorID:int,Temperature:float,Humidity:float):
+    temp = UpdateTemperature(SensorRef,SensorID,Temperature)
+    humid = UpdateHumidity(SensorRef,SensorID,Humidity)
     return temp,humid
 
 #Record Date

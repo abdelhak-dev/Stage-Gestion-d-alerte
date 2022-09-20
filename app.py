@@ -61,31 +61,32 @@ async def root():
 # exemple: verbe/{argument1}/{arguemnt2}
 
 #Add Capteur
-@app.get('/add_Sensor/{Sensor}/{Type}/{SensorID}',tags=["Set & Add functions"])
-async def Add_Sensor(Sensor:str,Type:str,SensorID:int):
-    return add_Sensor(Sensor,Type,SensorID)
+@app.get('/add_Sensor/{SensorID}/{SensorRef}/{Type}',tags=["Set & Add functions"])
+async def Add_Sensor(SensorID:int,SensorRef:str,Type:str):
+    print("code:200 Done !")
+    return add_Sensor(SensorID,SensorRef,Type)
 
 #Modification nom ou type du capteur
-@app.get('edit_ref/{Sensor}/{Type}',tags=["Edit Functions"])
+@app.get('/edit_ref/{Sensor}/{Type}',tags=["Edit Functions"])
 async def Edit_Sensor_Ref(Sensor:str,Type:str):
     return edit_SensorName(Sensor,Type)
 
 #Modification type du capteur
-@app.get('edit_sensor_type/{Sensor}/{Type}',tags=["Edit Functions"])
+@app.get('/edit_sensor_type/{Sensor}/{Type}',tags=["Edit Functions"])
 async def Edit_Sensor_Type(Sensor:str,Type:str):
     return edit_SensorType(Sensor,Type)
 
 # get accès on aura le choix entre selectionner une période spécifique
 ## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
 ###
-@app.get('get_acces_history/',tags=["Get Response"])
+@app.get('/get_acces_history/',tags=["Get Response"])
 async def Get_acces_history():
     return
 
 # get Alert history : On aura le choix entre selectionner une période spécifique
 ## ou d'afficher tout le historique et l'utilisateur peut choisir lui meme
 ###
-@app.get('get_alert_history/',tags=["Get Response"])
+@app.get('/get_alert_history/',tags=["Get Response"])
 async def Get_alert_history():
     return
 
@@ -93,9 +94,9 @@ async def Get_alert_history():
 
 
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
-@app.get('setTempHumid/{T}/{}',tags=["Set & Add functions"])
-async def SetTempHumid(Sensor:str,Date:str,Temperature,Humidity):
-    return set_Threshold(Sensor,Date,Temperature,Humidity)
+@app.get('/UpdateTempHumid/{SensorRef}/{SensorID}/{Temperature}/{Humidity}',tags=["Set & Add functions"])
+async def UpdateTempHumid(SensorRef:str,SensorID:int,Temperature,Humidity):
+    return Update_TempHumid(SensorRef,SensorID,Temperature,Humidity)
 
 #Record date
 

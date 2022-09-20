@@ -71,19 +71,17 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
     if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
     if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
-
-
     with connection_DBase() as conn:
         try:
             #Idverif(SensorID)
             c=conn.cursor()
-            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type) VALUES ('{}','{}','{}'); '''
+            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
             c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
             print({"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type})
 
         except:
-            rSQL = ''' UPDATE Capteurs SET SensorID = '{}', SensorRef='{}',Type='{}'
+            rSQL = ''' UPDATE Capteurs SET SensorID = '{}', SensorRef='{}',Type='{}',State= "OFF"
                         WHERE SensorID= '{}';'''
             c.execute(rSQL.format(SensorID,SensorRef,Type,SensorID))
             conn.commit()
@@ -130,27 +128,25 @@ def modifType(SensorID:int,SensorRef:str,Type:str):
 def availableSensors():
     with connection_DBase() as conn:
         c = conn.cursor()
-        try:
-            rSQL = ''' SELECT * FROM Capteur ORDER BY SensorID DESC;'''
-            c.execute(rSQL)
-            element= c.fetchall()
-            conn.commit()
-            return {"code": 200, "Element Found": element[0][0]}
-        except:
-            return {"Code": 404, "Element":None}
+        rSQL=''' SELECT * FROM Capteurs ORDER BY SensorRef;'''
+        c.execute(rSQL)
+        val = c.fetchall()
+        for i in range(3):
+            for j in range(2):
+                return {"Sensors":val[i][j]}
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
-def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
+def UpdateTemperature(SensorRef:str,SensorID:int,Temperature):
     if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
-    if type(Temperature) != type(10.00): return {"code":404,"error": "Value Sensor not correct"}
-
+    #if type(Temperature) != type(10.60): return {"code":404,"error": "Value Sensor not correct"}
+    date = datetime.now()
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
-            rSQL = ''' UPDATE Capteurs SET Temperature ='{}'
+            rSQL = ''' UPDATE Capteurs SET Temperature ='{}',Date ='{}',State ='ON'
                                 WHERE SensorRef ='{}' AND SensorID ='{}'; '''
-            c.execute(rSQL.format(Temperature,SensorRef,SensorID))
+            c.execute(rSQL.format(Temperature,date,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
             return {"code": 200, "TemperatureCondition is:":Temperature}
@@ -158,17 +154,17 @@ def SetTemperature(SensorRef:str,SensorID:int,Temperature:float):
             return {"Code": 404}
 
 
-def SetHumidity(SensorRef:str,SensorID:int,Humidity:float):
+def UpdateHumidity(SensorRef:str,SensorID:int,Humidity):
     if type(SensorID) != type(2): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RHK-3O0"): return {"code": 404, "error": " SensorRef not correct"}
-    if type(Humidity)    != type(20.00): return {"code": 404, "error": "Value Sensor not correct"}
-
+    #if type(Humidity)  != type(20.90): return {"code": 404, "error": "Value Sensor not correct"}
+    date = datetime.now()
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
-            rSQL = ''' UPDATE Capteurs SET Humidity ='{}'
+            rSQL = ''' UPDATE Capteurs SET Humidity ='{}',Date ='{}',State ='ON'
                                 WHERE SensorRef ='{}' AND SensorID ='{}'; '''
-            c.execute(rSQL.format(Humidity,SensorRef,SensorID))
+            c.execute(rSQL.format(Humidity,date,SensorRef,SensorID))
             conn.commit()
             #print(Temperature, Humidity, Sensor, SensorID)
             return {"code": 200, "HumidityCondition is":Humidity}
@@ -242,8 +238,6 @@ def Idverif(SensorID:int):
 
 
 
-
-
 #Fonction d'ajout à la base de donnée pour Table Alerte
 
 def Alert(AlertSubject:str,SensorID:int,DangerType:str,Destination):
@@ -251,38 +245,43 @@ def Alert(AlertSubject:str,SensorID:int,DangerType:str,Destination):
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
-            rSQL = '''INSERT INTO Alerte (AlertSubject,DangerType,DestinationEmail,Date) 
-                                VALUES ('{}','{}','{}','{}')'''
-            c.execute(rSQL.format(AlertSubject,DangerType,Destination,Date)) #SELECT SensorID FROM Capteurs
+            rSQL = '''INSERT INTO Alerte (AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
+                                VALUES ('{}','{}','{}','{}','{}');'''
+            c.execute(rSQL.format(AlertSubject,SensorID,DangerType,Destination,Date)) #SELECT SensorID FROM Capteurs
             conn.commit()
-
-            rSQL = '''INSERT INTO Alerte (SensorID) 
-                        SELECT SensorID FROM Capteurs; '''
-            c.execute(rSQL)
-            conn.commit()
-
             return {"code": 200}
-        except Error:
-            rSQL = '''UPDATE Alerte SET AlertSubject ='{}',DangerType='{}',DestinationEmail='{}',Date='{}';'''
-            c.execute(rSQL.format(AlertSubject, DangerType, Destination, Date))
+        except:
+            rSQL = ''' UPDATE Alerte SET AlertSubject ='{}',DangerType='{}',DestinationEmail='{}',Date='{}'
+                        WHERE SensorID = '{}' LIMIT 1;'''
+            c.execute(rSQL.format(AlertSubject, DangerType, Destination, Date,SensorID))
             conn.commit()
             conn.close()
             return {"code": 200}
 
 #fonction pour modifier le type d'alete from fatal to High or High to Fatal en fct de la date du déclenchement
-def AlertDangerModif(AlertSubject:str,DangerType:str,Date):
+"""def AlertDangerModif(AlertSubject:str,DangerType:str,Date):
     with connection_DBase() as conn:
         c = conn.cursor()
         rSQL = '''UPDATE Alerte SET DangerType ='{}' 
                     WHERE AlertSubject ='{}' AND Date = '{}';'''
         c.execute(rSQL.format(DangerType,AlertSubject,Date))
         conn.commit()
-        return {"code": 200}
+        return {"code": 200}"""
 
-def AlertModif(AlertSubject:str,DangerType:str,Date):
+def AlertDangerModif(AlertSubject:str,DangerType:str):
     with connection_DBase() as conn:
         c = conn.cursor()
-        rSQL = '''UPDATE Alerte SET AlertSubject ='{}' 
+        rSQL = ''' UPDATE Alerte SET DangerType ='{}' 
+                    WHERE AlertSubject ='{}' ORDER by id DESC LIMIT 1;'''
+        c.execute(rSQL.format(DangerType,AlertSubject))
+        conn.commit()
+        return {"code": 200}
+
+
+def AlertSubjectModif(AlertSubject:str,DangerType:str,Date):
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        rSQL = ''' UPDATE Alerte SET AlertSubject ='{}' 
                     WHERE DangerType ='{}' AND Date = '{}';'''
         c.execute(rSQL.format(AlertSubject,DangerType,Date))
         conn.commit()
@@ -306,18 +305,19 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 
 #test de l'ajout sensor et type:
 
-#Idverif(1)
-addCapteur(2,"DHT22","Temp&Humid") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
-SensorState(2,"ON")
-ddate()
-SetTemperature("DHT22",2,70.5)
-SetHumidity("DHT22",2,85.00)
+
+#addCapteur(3,"DHT11","Temp") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+#SensorState(3,"ON")
+#ddate()
+#SetTemperature("HCR-06",6,27.00)
+#SetHumidity("HCR-06",6,87.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 
-#availableSensors()
-#test de l'ajout d'un alerte
-#Alert("Temperature",1,'Fatal',"Admin@gmail.com")
+#Test de l'ajout d'un alerte
+
+#Alert("Temperature",2,"Fatal","Admin@gmail.com")
+#AlertDangerModif("Temperature","LOW")
 #AlertDangerModif("Temperature","LOW","2022-09-13 09:42:29.947286")
-#AlertModif("mimi","LOW","2022-09-13 09:42:29.947286")
+#AlertSubjectModif("mimi","LOW","2022-09-13 09:42:29.947286")
 #alertCondition()
 #ThresholdTemp()
