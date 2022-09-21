@@ -36,8 +36,8 @@ def Record_Date():
 ##
 ## Now we add Alert structure from database
 #Ajouter une alerte avec son type de danger Dnger : high or Fatal or Low
-def add_Alert(Alert: str, Danger: str, Destination):
-    return Alert(Alert, Danger, Destination)
+def add_Alert(AlertSubject: str,SensorID:int, DangerType: str, Destination):
+    return Alert(AlertSubject,SensorID, DangerType, Destination)
 
 #Modifier le type d'alerte : high or Fatal or Low
 def edit_AlertType(Alert:str,AlertDanger:str,Date):
@@ -48,3 +48,9 @@ def edit_Alert(Alert:str,AlertDanger:str,Date):
     return AlertModif(Alert,AlertDanger,Date)
 
 
+#
+##
+### RoomHistory function
+
+def RoomHistory():
+    return Roomtest()

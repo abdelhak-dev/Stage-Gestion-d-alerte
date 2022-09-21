@@ -58,6 +58,7 @@ def createBase():
                                     Date   TEXT);''')
 
     c.execute('''CREATE TABLE Alerte(
+        AlertID INTEGER ,
         AlertSubject VARCHAR(21) NOT NULL,
         SensorID    INTEGER NOT NULL,
         DangerType VARCHAR(21) NOT NULL,
@@ -65,10 +66,10 @@ def createBase():
         Date   TEXT,
         FOREIGN KEY(SensorID) REFERENCES Capteurs(SensorID));''')
 
-    c.execute('''CREATE TABLE HistoryRoomIn(
-            Presence VARCHAR(21) NOT NULL,
-            Date   TEXT,
-            FOREIGN KEY(Presence) REFERENCES Capteurs(Presence));''')
+    c.execute('''CREATE TABLE HistoryRoom ( 
+                                     Presence VARCHAR(21) , 
+                                     Date  TEXT);''')
+
     conn.commit()
     conn.close()
 
@@ -255,7 +256,57 @@ def Idverif(SensorID:int):
             print({"error":"The SensorID already exist !"})
         # 8°<Low<30, 30°<High<45, 50°<Fatal<60
 
+def compareT():
+ with connection_DBase() as conn:
+     c = conn.cursor()
+     lst = [[0,30],[30,45],[50,60]]
+     #try:
+     rSQL = ''' SELECT Temperature From Capteurs '''
+     c.execute(rSQL)
+     Temp = c.fetchone()
 
+     rSQL = ''' SELECT Humidity From Capteurs '''
+     c.execute(rSQL)
+     Humid = c.fetchone()
+     if Temp[0] <= lst[0][0]: #Temp[0] >= lst[0][0] and Temp <= lst[0][1]
+         return {"code":200,"Temperature Mesured is:":Temp[0],"DangerType is":"LOW"}
+         #print("Temperature selected is:", Temp[0]+ "LOW")
+     elif Temp[0] >= lst[0][0] and Humid[0] <= lst[0][1]:
+         return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "AVERAGE"}
+         #print("Temperature selected is:", Temp[0]+"AVERAGE")
+     elif Temp[0] >= lst[1][0] and Temp[0] <= lst[1][1]:
+         return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "AVERAGE HIGH"}
+         #print("Temperature selected is:", Temp[0] +"AVERAGE HIGH")
+
+     elif Temp[0] <= lst[2][0] and Temp[0] <= lst[2][1]:
+         return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "FATAL"}
+         #print("Temperature selected is:", Temp[0] + "FATAL")
+
+     elif Temp[0] >= lst[2][1]:
+         return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "FATAL"}
+
+
+def compareHumid():
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        lst = [20, 50, 80]
+        # try:
+        rSQL = ''' SELECT Humidity From Capteurs  '''
+        c.execute(rSQL)
+        Humid = c.fetchone()
+        print(Humid)
+        if Humid[0] <= lst[0]:
+            return {"code":200,"Humidity Mesured is:":Humid[0],"DangerType is":"LOW"}
+
+        elif Humid[0] >= lst[0] and Humid[0] <= lst[1]:
+            return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": "MEDIUM"}
+
+        elif Humid[0] >= lst[1] and Humid[0] <= lst[2]:
+            #Creat Alert
+            return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": "HIGH"}
+        elif Humid[0] >= lst[2]:
+            #Creat Alert
+            return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": "FATAL"}
 
 #Fonction d'ajout à la base de donnée pour Table Alerte
 
@@ -307,6 +358,38 @@ def AlertSubjectModif(AlertSubject:str,DangerType:str,Date):
         return {"code": 200}
 
 
+#Historique d'acces à la salle
+
+
+def Roomtest():
+    with connection_DBase() as conn:
+        #date = datetime.now()
+        c = conn.cursor()
+        try:
+            rSQL = ''' INSERT INTO HistoryRoom (Presence)
+                        SELECT Presence From Capteurs ;'''
+            c.execute(rSQL)
+
+            """rSQL = ''' INSERT INTO HistoryRoom (Date)
+                        SELECT Date From Capteurs ;'''
+            c.execute(rSQL)"""
+
+            rSQL = ''' UPDATE HistoryRoom 
+                       SET Presence = Presence
+                       FROM (SELECT Presence FROM Capteurs)
+                       WHERE HistoryRoom.Presence = Capteurs.Presence ;'''
+            c.execute(rSQL)
+
+            conn.commit()
+            return {"code": 200, "Message": "Done"}
+        except:
+
+            c = conn.cursor()
+            rSQL = ''' UPDATE HistoryRoom SET Presence = Capteurs.Presence
+                                WHERE Date = Capteurs.Date ;'''
+            c.execute(rSQL)
+            conn.commit()
+            return {"code": 200, "Message": "Done"}
 
 
 def __test__():
@@ -325,7 +408,8 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #test de l'ajout sensor et type:
 
 
-#addCapteur(3,"DHT11","Temp") #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+#addCapteur(3,"DHT11","Temp")        #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
+#addCapteur(2,SensorRef,Type)
 #SensorState(3,"ON")
 #ddate()
 #SetTemperature("HCR-06",6,27.00)
@@ -340,3 +424,8 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #AlertSubjectModif("mimi","LOW","2022-09-13 09:42:29.947286")
 #alertCondition()
 #ThresholdTemp()
+
+#Room Presence
+#Roomtest()
+compareT()
+#compareHumid()

@@ -92,7 +92,6 @@ async def Get_alert_history():
 
 
 
-
 #Set threshold : mettre un seuil de déclenchemnt de l'alerte (sur Temperature ou Humidité)
 @app.get('/UpdateTempHumid/{SensorRef}/{SensorID}/{Temperature}/{Humidity}',tags=["ArduinoYun functions"])
 async def UpdateTempHumid(SensorRef:str,SensorID:int,Temperature,Humidity):
