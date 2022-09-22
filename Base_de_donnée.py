@@ -82,7 +82,9 @@ def createBase():
     conn.commit()
     conn.close()
 
-#Table Capteurs
+#
+##
+### Add Sensor & Edit Sensor
 def addCapteur(SensorID:int,SensorRef:str,Type:str):
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
     if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
@@ -123,19 +125,6 @@ def modifType(SensorID:int,SensorRef:str,Type:str):
         c = conn.cursor()
         rSQL = ''' UPDATE Capteurs SET Type ='{}' 
                                     WHERE SensorRef = '{}' AND SensorID = '{}' ;'''
-        c.execute(rSQL.format(Type,SensorRef,SensorID))
-        conn.commit()
-        return {"code": 200, "ModifiedType": Type}
-
-def modifType(SensorID:int,SensorRef:str,Type:str):
-    if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
-    if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
-    if type(Type) != type("str"): return {"code": 404, "error": "Type not correct"}
-
-    with connection_DBase() as conn:
-        c = conn.cursor()
-        rSQL = ''' UPDATE Capteurs SET Type ='{}' 
-                                    WHERE SensorRef = '{}' AND SensorID = '{}';'''
         c.execute(rSQL.format(Type,SensorRef,SensorID))
         conn.commit()
         return {"code": 200, "ModifiedType": Type}
@@ -203,18 +192,6 @@ def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
         conn.commit()
     return {"code": 200, "Presence": Presence, "AT":date}
 
-
-
-"""def getvalue1()
-##fonction qui prend la valeur receptionnée par HTTP
-###Et la mets dans value1 de tableau capteurs
-    pass
-
-def getvalue2()
-##fonction qui prend la valeur receptionnée par HTTP
-###Et la mets dans value2 de tableau capteurs
-    pass"""
-
 def SensorState(SensorID:int,State:str):
     if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
     #if type(SensorRef) != str(): return {"code": 404, "error": " SensorRef not correct"}
@@ -271,6 +248,10 @@ def Idverif(SensorID:int):
             print({"error":"The SensorID already exist !"})
         # 8°<Low<30, 30°<High<45, 50°<Fatal<60
 
+
+#
+##
+### Compare to Declenche Alerte
 def compareT():
  with connection_DBase() as conn:
      c = conn.cursor()
@@ -300,7 +281,6 @@ def compareT():
      elif Temp[0] >= lst[2][1]:
          return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "FATAL"}
 
-
 def compareHumid():
     with connection_DBase() as conn:
         c = conn.cursor()
@@ -323,7 +303,11 @@ def compareHumid():
             #Creat Alert
             return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": "FATAL"}
 
-#Fonction d'ajout à la base de donnée pour Table Alerte
+
+
+#
+##
+### Fonction Gestion d'Alerte
 
 def Alert(AlertSubject:str,SensorID:int,DangerType:str,Destination):
     #Date = datetime.now()
@@ -364,7 +348,6 @@ def AlertDangerModif(AlertSubject:str,DangerType:str):
         conn.commit()
         return {"code": 200}
 
-
 def AlertSubjectModif(AlertSubject:str,DangerType:str,Date):
     with connection_DBase() as conn:
         c = conn.cursor()
@@ -374,9 +357,9 @@ def AlertSubjectModif(AlertSubject:str,DangerType:str,Date):
         conn.commit()
         return {"code": 200}
 
-
-#Historique d'acces à la salle
-
+#
+##
+### Historique d'acces à la salle
 
 def RoomAcces():
     with connection_DBase() as conn:
@@ -388,7 +371,9 @@ def RoomAcces():
         conn.commit()
         return {"code": 200, "Message": "Done"}
 
-#Fonction Pour Affichage
+#
+##
+### Fonction Pour Affichage
 def AfficheTemp():
     with connection_DBase()as conn:
         c = conn.cursor()
