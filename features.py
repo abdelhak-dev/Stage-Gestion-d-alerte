@@ -54,3 +54,15 @@ def edit_Alert(Alert:str,AlertDanger:str,Date):
 
 def RoomHistory():
     return Roomtest()
+
+
+
+#
+##
+### Fonction Pour Affichage
+
+def AfficheTemperature():
+    return AfficheTemp()
+
+def AfficheHumidity():
+    return AfficheHumid()

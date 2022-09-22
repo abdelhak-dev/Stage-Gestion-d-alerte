@@ -48,14 +48,15 @@ def createBase():
 
     c = conn.cursor()
     c.execute('''CREATE TABLE Capteurs(
-                                    SensorID     INTEGER PRIMARY KEY,
+                                    SensorID     INTEGER,
                                     SensorRef VARCHAR(21) NOT NULL ,
                                     Type   VARCHAR(21) NOT NULL ,
                                     State   VARCHAR(21),
                                     Temperature REAL ,
                                     Humidity REAL ,
                                     Presence   VARCHAR(21),
-                                    Date   TEXT);''')
+                                    Date   TEXT,
+                                    PRIMARY KEY (SensorID,Temperature,Humidity));''')
 
     c.execute('''CREATE TABLE Alerte(
         AlertID INTEGER ,
@@ -67,8 +68,16 @@ def createBase():
         FOREIGN KEY(SensorID) REFERENCES Capteurs(SensorID));''')
 
     c.execute('''CREATE TABLE HistoryRoom ( 
-                                     Presence VARCHAR(21) , 
-                                     Date  TEXT);''')
+                                     Presence VARCHAR(21) NOT NULL , 
+                                     Dte  TEXT NOT NULL);''')
+
+    c.execute('''CREATE TABLE DataHistory ( 
+                                         SensorID     INTEGER,
+                                         Temperature REAL ,
+                                         Humidity REAL ,
+                                         Presence   VARCHAR(21),
+                                         Date  TEXT,
+                                         PRIMARY KEY (SensorID,Temperature,Humidity,Date));''')
 
     conn.commit()
     conn.close()
@@ -82,7 +91,7 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
         try:
             #Idverif(SensorID)
             c=conn.cursor()
-            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
+            rSQL = ''' INSERT OR REPLACE INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
             c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
             return {"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type}
@@ -147,7 +156,8 @@ def UpdateTemperature(SensorRef:str,SensorID:int,Temperature):
     if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
     #if type(Temperature) != type(10.60): return {"code":404,"error": "Value Sensor not correct"}
-    date = datetime.now()
+    now = datetime.now()
+    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
@@ -164,7 +174,8 @@ def UpdateHumidity(SensorRef:str,SensorID:int,Humidity):
     if type(SensorID) != type(2): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RHK-3O0"): return {"code": 404, "error": " SensorRef not correct"}
     #if type(Humidity)  != type(20.90): return {"code": 404, "error": "Value Sensor not correct"}
-    date = datetime.now()
+    now = datetime.now()
+    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
@@ -181,7 +192,9 @@ def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
     if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
     if type(Presence) != type("str"): return {"code": 404, "error": "Presence not correct"}
-    date = datetime.now()
+    #date = datetime.now()
+    now = datetime.now()
+    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase()as conn:
         c = conn.cursor()
         rSQL= ''' UPDATE Capteurs SET Presence ='{}',State ='ON',Date='{}'
@@ -220,7 +233,9 @@ def SensorState(SensorID:int,State:str):
 #dans la base de donnée
 def ddate():
     with connection_DBase() as conn:
-        date = datetime.now()
+        #date = datetime.now()
+        now = datetime.now()
+        date = now.strftime("%m-%d-%Y, %H:%M:%S")
         c = conn.cursor()
         try:
             rSQL =''' INSERT INTO Capteurs (Date) VALUES ('{}');'''
@@ -311,7 +326,9 @@ def compareHumid():
 #Fonction d'ajout à la base de donnée pour Table Alerte
 
 def Alert(AlertSubject:str,SensorID:int,DangerType:str,Destination):
-    Date = datetime.now()
+    #Date = datetime.now()
+    now = datetime.now()
+    Date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
@@ -361,35 +378,49 @@ def AlertSubjectModif(AlertSubject:str,DangerType:str,Date):
 #Historique d'acces à la salle
 
 
-def Roomtest():
+def RoomAcces():
     with connection_DBase() as conn:
         #date = datetime.now()
         c = conn.cursor()
-        try:
-            rSQL = ''' INSERT INTO HistoryRoom (Presence)
-                        SELECT Presence From Capteurs ;'''
-            c.execute(rSQL)
+        rSQL = ''' INSERT OR IGNORE INTO HistoryRoom (Presence,Dte)
+                    SELECT Presence,Date FROM Capteurs LIMIT 2 ;'''
+        c.execute(rSQL)
+        conn.commit()
+        return {"code": 200, "Message": "Done"}
 
-            """rSQL = ''' INSERT INTO HistoryRoom (Date)
-                        SELECT Date From Capteurs ;'''
-            c.execute(rSQL)"""
+#Fonction Pour Affichage
+def AfficheTemp():
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL = ''' SELECT Temperature FROM Capteurs;'''
+        c.execute(rSQL)
+        Temp = c.fetchone()
+    return Temp[0]
 
-            rSQL = ''' UPDATE HistoryRoom 
-                       SET Presence = Presence
-                       FROM (SELECT Presence FROM Capteurs)
-                       WHERE HistoryRoom.Presence = Capteurs.Presence ;'''
-            c.execute(rSQL)
+def AfficheHumid():
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL = ''' SELECT Humidity FROM Capteurs ;'''
+        c.execute(rSQL)
+        Humid = c.fetchone()
+    return Humid[0]
 
-            conn.commit()
-            return {"code": 200, "Message": "Done"}
-        except:
 
-            c = conn.cursor()
-            rSQL = ''' UPDATE HistoryRoom SET Presence = Capteurs.Presence
-                                WHERE Date = Capteurs.Date ;'''
-            c.execute(rSQL)
-            conn.commit()
-            return {"code": 200, "Message": "Done"}
+#
+##
+### Storage Functions
+
+def StoringData():
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Presence,Date)
+                    SELECT SensorID, Temperature,Humidity,Presence,Date
+                    FROM Capteurs;'''
+        c.execute(rSQL)
+        conn.commit()
+        print("Data Stored Succeflly !")
+
+
 
 
 def __test__():
@@ -416,6 +447,20 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #SetHumidity("HCR-06",6,87.00)
 #TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
 
+#Ajout d'un capteur
+addCapteur(1,"DHT22","Temp&Humid")
+addCapteur(2,"HC-SR501","Mouvement")
+
+#Test Arduino Yun Fonctions
+UpdateHumidity("DHT22",1,80)
+UpdateTemperature("DHT22",1,26.7)
+UpdatePresence("HC-SR501",2,"PresenceDetected")
+
+#Test DataStoring Functions
+StoringData()
+
+#Room Presence
+RoomAcces()
 #Test de l'ajout d'un alerte
 
 #Alert("Temperature",2,"Fatal","Admin@gmail.com")
@@ -425,7 +470,6 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #alertCondition()
 #ThresholdTemp()
 
-#Room Presence
-#Roomtest()
-compareT()
+
+#compareT()
 #compareHumid()

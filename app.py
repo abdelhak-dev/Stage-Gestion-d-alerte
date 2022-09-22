@@ -103,11 +103,18 @@ async def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
 
 #Record date
 
+#
+##
+### Fonction d'affichage
+@app.get('/AfficheTemp/',tags=["Statistic & Data Analysis Functions"])
+async def Affiche_Temp():
+    return AfficheTemperature()
 
 
 
-
-
+@app.get('/AfficheHumid/',tags=["Statistic & Data Analysis Functions"])
+async def Affiche_Humid():
+    return AfficheHumidity()
 
 
 
