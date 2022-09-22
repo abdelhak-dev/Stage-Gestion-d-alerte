@@ -116,6 +116,9 @@ async def Affiche_Temp():
 async def Affiche_Humid():
     return AfficheHumidity()
 
+@app.get('/GetRoomState/',tags=["Statistic & Data Analysis Functions"]) #Temp Humid
+async def RoomState():
+    return Room_State()
 
 
 
