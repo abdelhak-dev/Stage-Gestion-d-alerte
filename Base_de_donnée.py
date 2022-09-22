@@ -75,12 +75,12 @@ def createBase():
                                          SensorID     INTEGER,
                                          Temperature REAL ,
                                          Humidity REAL ,
-                                         Presence   VARCHAR(21),
                                          Date  TEXT,
                                          PRIMARY KEY (SensorID,Temperature,Humidity,Date));''')
 
     conn.commit()
     conn.close()
+
 
 #
 ##
@@ -93,7 +93,7 @@ def addCapteur(SensorID:int,SensorRef:str,Type:str):
         try:
             #Idverif(SensorID)
             c=conn.cursor()
-            rSQL = ''' INSERT OR REPLACE INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
+            rSQL = ''' INSERT INTO Capteurs (SensorID,SensorRef,Type,State) VALUES ('{}','{}','{}',"OFF"); '''
             c.execute(rSQL.format(SensorID, SensorRef, Type))
             conn.commit()
             return {"code": 200, "Creating SensorID": SensorID, "SensorReference": SensorRef, "Type": Type}
@@ -128,17 +128,6 @@ def modifType(SensorID:int,SensorRef:str,Type:str):
         c.execute(rSQL.format(Type,SensorRef,SensorID))
         conn.commit()
         return {"code": 200, "ModifiedType": Type}
-
-
-def availableSensors():
-    with connection_DBase() as conn:
-        c = conn.cursor()
-        rSQL=''' SELECT * FROM Capteurs ORDER BY SensorRef;'''
-        c.execute(rSQL)
-        val = c.fetchall()
-        for i in range(3):
-            for j in range(2):
-                return {"Sensors":val[i][j]}
 
 #Les valeurs temp et humid seront remplacer par ce qui viendra de la communication HTTP
 def UpdateTemperature(SensorRef:str,SensorID:int,Temperature):
@@ -205,6 +194,20 @@ def SensorState(SensorID:int,State:str):
         conn.commit()
         return {"code": 200, "State": State}
         #return "state changed to '{}'".format(State)
+
+
+#
+##
+### List Available Devices "Sensors"
+def availableSensors():
+    with connection_DBase() as conn:
+        c = conn.cursor()
+        rSQL=''' SELECT * FROM Capteurs ORDER BY SensorRef;'''
+        c.execute(rSQL)
+        val = c.fetchall()
+        for i in range(3):
+            for j in range(2):
+                return {"Sensors":val[i][j]}
 
 #c'était qu'une fonction de test pour tester l'ajout de la date
 #dans la base de donnée
@@ -398,9 +401,9 @@ def AfficheHumid():
 def StoringData():
     with connection_DBase()as conn:
         c = conn.cursor()
-        rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Presence,Date)
-                    SELECT SensorID, Temperature,Humidity,Presence,Date
-                    FROM Capteurs;'''
+        rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Date)
+                    SELECT SensorID, Temperature,Humidity,Date
+                    FROM Capteurs LIMIT 1;'''
         c.execute(rSQL)
         conn.commit()
         print("Data Stored Succeflly !")
@@ -437,8 +440,8 @@ addCapteur(1,"DHT22","Temp&Humid")
 addCapteur(2,"HC-SR501","Mouvement")
 
 #Test Arduino Yun Fonctions
-UpdateHumidity("DHT22",1,80)
-UpdateTemperature("DHT22",1,26.7)
+UpdateHumidity("DHT22",1,80.90)
+UpdateTemperature("DHT22",1,26)
 UpdatePresence("HC-SR501",2,"PresenceDetected")
 
 #Test DataStoring Functions
