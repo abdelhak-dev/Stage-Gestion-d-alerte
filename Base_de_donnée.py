@@ -403,7 +403,8 @@ def StoringData():
         c = conn.cursor()
         rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Date)
                     SELECT SensorID, Temperature,Humidity,Date
-                    FROM Capteurs LIMIT 1;'''
+                    FROM Capteurs
+                    WHERE SensorRef = "DHT11" LIMIT 1;'''
         c.execute(rSQL)
         conn.commit()
         print("Data Stored Succeflly !")
@@ -424,25 +425,19 @@ def __test__():
 if __name__=='__main__':  #'__Base_de_donnée__'
     __test__()
 
-#test de l'ajout sensor et type:
 
+#
+##
+##Test de l'écriture à la base de données hors line:
 
-#addCapteur(3,"DHT11","Temp")        #Cette fonction ne peut pas etre executer 2fois avec meme Sensor ID
-#addCapteur(2,SensorRef,Type)
-#SensorState(3,"ON")
-#ddate()
-#SetTemperature("HCR-06",6,27.00)
-#SetHumidity("HCR-06",6,87.00)
-#TemperatureHumidity("ZEGBEE",1,10.00,10.00) #TemperatureHumidity(Sensor:str,SensorID:int,Temperature:float,Humidity:float):
-
-#Ajout d'un capteur
-addCapteur(1,"DHT22","Temp&Humid")
-addCapteur(2,"HC-SR501","Mouvement")
+### Ajout d'un capteur
+#addCapteur(1,"DHT22","Temp&Humid")
+#addCapteur(2,"HC-SR501","Mouvement")
 
 #Test Arduino Yun Fonctions
-UpdateHumidity("DHT22",1,80.90)
-UpdateTemperature("DHT22",1,26)
-UpdatePresence("HC-SR501",2,"PresenceDetected")
+#UpdateHumidity("DHT22",1,80.90)
+#UpdateTemperature("DHT22",1,26)
+#UpdatePresence("HC-SR501",2,"PresenceDetected")
 
 #Test DataStoring Functions
 StoringData()
