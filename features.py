@@ -29,8 +29,6 @@ def Update_Presence(SensorRef:str,SensorID:int,Presence:str):
     return UpdatePresence(SensorRef,SensorID,Presence)
 
 #Record Date
-def Record_Date():
-    return ddate()
 
 #
 ##
@@ -66,3 +64,10 @@ def AfficheTemperature():
 
 def AfficheHumidity():
     return AfficheHumid()
+
+#Data Record
+def DataRecord():
+    return StoringData()
+
+def RoomAccesStorage():
+    return RoomAcces()

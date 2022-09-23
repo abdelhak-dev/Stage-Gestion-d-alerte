@@ -5,6 +5,8 @@ from pathlib import Path
 from datetime import datetime
 
 databaseName = "Server_room.db"
+now = datetime.now()
+date = now.strftime("%m-%d-%Y, %H:%M:%S")
 
 def connection_DBase():
     try:
@@ -59,9 +61,9 @@ def createBase():
                                     PRIMARY KEY (SensorID,Temperature,Humidity));''')
 
     c.execute('''CREATE TABLE Alerte(
-        AlertID INTEGER ,
+        AlertID INTEGER NOT NULL,
         AlertSubject VARCHAR(21) NOT NULL,
-        SensorID    INTEGER NOT NULL,
+        SensorID    INTEGER ,
         DangerType VARCHAR(21) NOT NULL,
         DestinationEmail VARCHAR(21) NOT NULL,
         Date   TEXT,
@@ -76,10 +78,12 @@ def createBase():
                                          Temperature REAL ,
                                          Humidity REAL ,
                                          Date  TEXT,
-                                         PRIMARY KEY (SensorID,Temperature,Humidity,Date));''')
+                                         FOREIGN KEY(SensorID) REFERENCES Capteurs(SensorID));''')
 
     conn.commit()
     conn.close()
+
+
 
 
 #
@@ -134,8 +138,6 @@ def UpdateTemperature(SensorRef:str,SensorID:int,Temperature):
     if type(SensorID) != type(1): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RJK8-2N_3I"): return {"code": 404, "error": " SensorRef not correct"}
     #if type(Temperature) != type(10.60): return {"code":404,"error": "Value Sensor not correct"}
-    now = datetime.now()
-    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
@@ -152,8 +154,6 @@ def UpdateHumidity(SensorRef:str,SensorID:int,Humidity):
     if type(SensorID) != type(2): return {"code": 404, "error": " SensorID not correct"}
     if type(SensorRef) != type("RHK-3O0"): return {"code": 404, "error": " SensorRef not correct"}
     #if type(Humidity)  != type(20.90): return {"code": 404, "error": "Value Sensor not correct"}
-    now = datetime.now()
-    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase() as conn:
         c = conn.cursor()
         try:
@@ -170,9 +170,6 @@ def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
     if type(SensorRef) != type("str"):return {"code":404,"error": "SensorRef not correct"}
     if type(SensorID) != type(3): return {"code": 404, "error": "SensorID not correct"}
     if type(Presence) != type("str"): return {"code": 404, "error": "Presence not correct"}
-    #date = datetime.now()
-    now = datetime.now()
-    date = now.strftime("%m-%d-%Y, %H:%M:%S")
     with connection_DBase()as conn:
         c = conn.cursor()
         rSQL= ''' UPDATE Capteurs SET Presence ='{}',State ='ON',Date='{}'
@@ -211,22 +208,6 @@ def availableSensors():
 
 #c'était qu'une fonction de test pour tester l'ajout de la date
 #dans la base de donnée
-def ddate():
-    with connection_DBase() as conn:
-        #date = datetime.now()
-        now = datetime.now()
-        date = now.strftime("%m-%d-%Y, %H:%M:%S")
-        c = conn.cursor()
-        try:
-            rSQL =''' INSERT INTO Capteurs (Date) VALUES ('{}');'''
-            c.execute(rSQL.format(date))
-            conn.commit()
-            return {"code": 200, "Date": date}
-        except:
-            rSQL = ''' UPDATE Capteurs SET Date ='{}';'''
-            c.execute(rSQL.format(date))
-            conn.commit()
-            return {"code": 200}
 
 def sort_Temperature():
     values = []
@@ -260,37 +241,33 @@ def compareT():
      c = conn.cursor()
      NormTemp = [10,15,25,32]
      #try:
-     rSQL = ''' SELECT Temperature From Capteurs '''
+     rSQL = ''' SELECT SensorId, Temperature From Capteurs '''
      c.execute(rSQL)
      Temp = c.fetchone()
-
-     rSQL = ''' SELECT Humidity From Capteurs '''
-     c.execute(rSQL)
-     Humid = c.fetchone()
-     if Temp[0] <= NormTemp[0]: #Temp[0] >= lst[0][0] and Temp <= lst[0][1]
+     if Temp[1] in range(0,NormTemp[0]): #Temp[0] >= lst[0][0] and Temp <= lst[0][1]
          DangerType ="LOW"
-         return DangerType
+         return [Temp[0],DangerType]
          #return {"code":200,"Temperature Mesured is:":Temp[0],"DangerType is":"LOW"}
 
          #print("Temperature selected is:", Temp[0]+ "LOW")
-     elif Temp[0] >= NormTemp[0] and Temp[0] <= NormTemp[1]:
+     elif Temp[1] in range(NormTemp[0],NormTemp[1]):
          DangerType = "AVERAGE"
-         return DangerType
+         return [Temp[0],DangerType]
          #return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "AVERAGE"}
          #print("Temperature selected is:", Temp[0]+"AVERAGE")
-     elif Temp[0] >= NormTemp[1] and Temp[0] <= NormTemp[2]:
+     elif Temp[1] in range(NormTemp[1],NormTemp[2]):
          DangerType = "AVERAGE HIGH"
-         return DangerType
+         return [Temp[0],DangerType]
          #return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "AVERAGE HIGH"}
          #print("Temperature selected is:", Temp[0] +"AVERAGE HIGH")
-     elif Temp[0] <= NormTemp[2] and Temp[0] <= NormTemp[3]:
+     elif Temp[1] in range(NormTemp[2],NormTemp[3]):
          DangerType ="FATAL"
-         return DangerType
+         return [Temp[0],DangerType]
          #return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "FATAL"}
          #print("Temperature selected is:", Temp[0] + "FATAL")
-     elif Temp[0] >= NormTemp[3]:
-         DangerType = "FATAL"
-         return DangerType
+     elif Temp[1] >= NormTemp[3]:
+         DangerType = "FATAL HIGH Than 32dg"
+         return [Temp[0],DangerType]
          #return {"code": 200, "Temperature Mesured is:": Temp[0], "DangerType is": "FATAL"}
 
 def compareHumid():
@@ -298,47 +275,60 @@ def compareHumid():
         c = conn.cursor()
         NormHumid = [8,20,50,70,80]
         # try:
-        rSQL = ''' SELECT Humidity From Capteurs  '''
+        rSQL = ''' SELECT SensorID, Humidity From Capteurs  '''
         c.execute(rSQL)
         Humid = c.fetchone()
-        print(Humid)
-        if Humid[0]in range(NormHumid[0],NormHumid[1]):
+        if Humid[1]in range(NormHumid[0],NormHumid[1]):
             DangerType = "LOW"
             #return {"code":200,"Humidity Mesured is:":Humid[0],"DangerType is": DangerType}
-            return DangerType
-        elif Humid[0] in range(NormHumid[1],NormHumid[2]):
+            return [Humid[0],DangerType]
+        elif Humid[1] in range(NormHumid[1],NormHumid[2]):
             DangerType = "MEDIUM"
             #return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": DangerType}
-            return DangerType
-        elif Humid[0] in range(NormHumid[3],NormHumid[4]):
+            return [Humid[0],DangerType]
+        elif Humid[1] in range(NormHumid[3],NormHumid[4]):
             #Creat Alert
             DangerType="HIGH"
             #return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": DangerType}
-            return DangerType
-        else:
+            return [Humid[0],DangerType]
+        elif Humid[1] >= NormHumid[4] :
             #Creat Alert
-            DangerType ="So HIGH"
+            DangerType ="HIGH"
             #return {"code":200,"Humidity Mesured is:": Humid[0], "DangerType is": DangerType}
-            return DangerType
+            return [Humid[0],DangerType]
 
 
-def CompareMixer():
+def SubjectDecision():
     Temp_State = compareT()
+    TempSensorID = Temp_State[0]
+    TempDangerType =Temp_State[1]
     Humid_State = compareHumid()
+    HumidSensorID = Humid_State[0]
+    HumidDangerType = Humid_State[1]
+    TempDeg = ["AVERAGE HIGH","FATAL","FATAL HIGH Than 32dg"]
     with connection_DBase() as conn:
         c = conn.cursor()
-        if Temp_State == "HIGH" :
-            AlerteTopic = "Temperature"
-            return AlerteTopic
-        elif Humid_State == "Humidity" :
-            AlerteTopic = "Humidity"
-            return AlerteTopic
-        elif Temp_State == "HIGH" and Humid_State == "Humidity":
+        if Temp_State[1] in TempDeg :
+            TempSensorID = Temp_State[0]
+            AlerteTopic = 1
+            TempAlerteTopic = "Temperature"
+            return [AlerteTopic,TempSensorID,TempAlerteTopic,TempDangerType]
+
+        elif Humid_State[1] == "HIGH" :
+            AlerteTopic = 1
+            HumidAlerteTopic = "Humidity"
+            return [AlerteTopic,HumidSensorID,HumidAlerteTopic,HumidDangerType]
+
+        elif Temp_State[1] in TempDeg and Humid_State[1] == "HIGH":
             AlerteTopic = 2
-            return AlerteTopic
+            TempAlerteTopic = "Temperature"
+            HumidAlerteTopic = "Humidity"
+            #return [SensorID1,AlertTopic1,DangerType1,SensorID2,AlertTopic2,DangerType2]
+            return [AlerteTopic,TempSensorID,TempAlerteTopic,TempDangerType,HumidSensorID,HumidAlerteTopic,HumidDangerType]
+
         else:
             AlerteTopic = 0
-            return AlerteTopic
+            return [AlerteTopic]
 
 
 
@@ -346,42 +336,63 @@ def CompareMixer():
 ##
 ### Fonction Gestion d'Alerte
 
-def CompareToAlert():
-
-    return
-def Alert(SensorID:int,Destination):
-    now = datetime.now()
-    Date = now.strftime("%m-%d-%Y, %H:%M:%S")
-    DangerType = compareT()
-    AlertSubject = CompareMixer()
+def Alert(Destination):
+    InstSubjectDecision = SubjectDecision()
+    conditionAlert = InstSubjectDecision[0]
+    AlertID = 1
     with connection_DBase() as conn:
         c = conn.cursor()
-        if AlertSubject == 0:
+
+        if conditionAlert == 0:
             return {"code":200,"Message":"No Message Repported"}
-        if AlertSubject == 2 :
-            rSQL2 = ''' INSERT INTO Alerte (AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
-                            VALUES ('Temperature','{}','{}','{}','{}');'''
-            c.execute(rSQL2)
 
-            rSQL2 = ''' INSERT INTO Alerte (AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
-                                        VALUES ('Humidity','{}','{}','{}','{}');'''
-            c.execute(rSQL2)
-            conn.commit()
-            return {"code":200,"Message":f" Alert '{AlertSubject}'Repported"}
-        else:
-            rSQL = '''INSERT INTO Alerte (AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
-                                VALUES ('{}','{}','{}','{}','{}');'''
-            c.execute(rSQL.format(AlertSubject,SensorID,DangerType,Destination,Date)) #SELECT SensorID FROM Capteurs
-            conn.commit()
-            return {"code":200,"Message":f" Alert '{AlertSubject}'Repported"}.format()
+        if conditionAlert == 2 :
+            AlertTopic2 = InstSubjectDecision[5]  # humidity
+            SensorID2 = InstSubjectDecision[4]  # humidity
+            DangerType2 = InstSubjectDecision[6] # humidity
+            AlertTopic1 = InstSubjectDecision[2]  # Temperature
+            SensorID1 = InstSubjectDecision[1]  # Temperature
+            DangerType1 = InstSubjectDecision[3]  # Temperature
 
-        """except:
-            rSQL = ''' UPDATE Alerte SET AlertSubject ='{}',DangerType='{}',DestinationEmail='{}',Date='{}'
-                        WHERE SensorID = '{}' LIMIT 1;'''
-            c.execute(rSQL.format(AlertSubject, DangerType, Destination, Date,SensorID))
+            rSQL2 = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
+                            VALUES ('{}','{}','{}','{}','{}','{}');'''
+            c.execute(rSQL2.format(AlertID,AlertTopic1,SensorID1,DangerType1,Destination,date))
+            AlertID +=1
+
+            rSQL2 = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
+                                        VALUES ('{}','{}','{}','{}','{}','{}');'''
+            c.execute(rSQL2.format(AlertID,AlertTopic2,SensorID2,DangerType2,Destination,date))
             conn.commit()
-            conn.close()
-            return {"code": 200}"""
+            AlertID +=1
+            return {"code":200,"Message":f" Alert '{AlertTopic1} and '{AlertTopic2}'Repported"}
+
+        elif conditionAlert == 1 and InstSubjectDecision[2] == "Temperature" :
+            AlertTopic1 = InstSubjectDecision[2]  # Temperature
+            SensorID1 = InstSubjectDecision[1]  # Temperature
+            DangerType1 = InstSubjectDecision[3]  # Temperature
+
+            rSQL = '''INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
+                                        VALUES ('{}','{}','{}','{}','{}','{}');'''
+            c.execute(
+            rSQL.format(AlertID,AlertTopic1, SensorID1, DangerType1, Destination,date))  # SELECT SensorID FROM Capteurs
+            conn.commit()
+            AlertID +=1
+            return {"code": 200, "Message": f" Alert '{AlertTopic1}'Repported"}
+
+        elif conditionAlert == 1 and InstSubjectDecision[2] == "Humidity":
+            SensorID2 = InstSubjectDecision[1]  # humidity
+            AlertTopic2 = InstSubjectDecision[2]  # humidity
+            DangerType2 = InstSubjectDecision[3] #humidity
+
+            rSQL = '''INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
+                                        VALUES ('{}','{}','{}','{}','{}','{}');'''
+            c.execute(
+                rSQL.format(AlertID, AlertTopic2, SensorID2, DangerType2, Destination,date))  # SELECT SensorID FROM Capteurs
+            conn.commit()
+            AlertID += 1
+            return {"code": 200, "Message": f" Alert '{AlertTopic2}'Repported"}
+
+
 
 #fonction pour modifier le type d'alete from fatal to High or High to Fatal en fct de la date du déclenchement
 """def AlertDangerModif(AlertSubject:str,DangerType:str,Date):
@@ -452,16 +463,20 @@ def AfficheHumid():
 def StoringData():
     with connection_DBase()as conn:
         c = conn.cursor()
-        rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Date)
+        rSQL = ''' INSERT INTO DataHistory (SensorID,Temperature,Humidity,Date)
                     SELECT SensorID, Temperature,Humidity,Date
                     FROM Capteurs
-                    WHERE SensorRef = "DHT11" LIMIT 1;'''
+                    WHERE SensorID = SensorRef="DHT11" LIMIT 1;'''
         c.execute(rSQL)
         conn.commit()
         print("Data Stored Successflly !")
 
 
 
+#StoringData()
+
+#Room Presence
+#RoomAcces()
 
 def __test__():
     ''' unit tests of this module functions
@@ -486,9 +501,9 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #addCapteur(2,"HC-SR501","Mouvement")
 
 #Test Arduino Yun Fonctions
-#UpdateHumidity("DHT22",1,80.90)
-#UpdateTemperature("DHT22",1,26)
-#UpdatePresence("HC-SR501",2,"PresenceDetected")
+UpdateHumidity("DHT22",1,82.00)
+UpdateTemperature("DHT22",1,20)
+UpdatePresence("HC-SR501",2,"PresenceDetected")
 
 #Test DataStoring Functions
 StoringData()
@@ -497,13 +512,13 @@ StoringData()
 RoomAcces()
 #Test de l'ajout d'un alerte
 
-#Alert("Temperature",2,"Fatal","Admin@gmail.com")
+Alert("admin@admin.com")
 #AlertDangerModif("Temperature","LOW")
 #AlertDangerModif("Temperature","LOW","2022-09-13 09:42:29.947286")
 #AlertSubjectModif("mimi","LOW","2022-09-13 09:42:29.947286")
 #alertCondition()
 #ThresholdTemp()
-
+compareHumid()
 
 #compareT()
 #compareHumid()

@@ -101,8 +101,7 @@ async def UpdateTempHumid(SensorRef:str,SensorID:int,Temperature,Humidity):
 async def UpdatePresence(SensorRef:str,SensorID:int,Presence:str):
     return Update_Presence(SensorRef,SensorID,Presence)
 
-#Record date
-
+#Record
 #
 ##
 ### Fonction d'affichage
