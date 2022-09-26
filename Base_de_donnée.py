@@ -532,7 +532,7 @@ def AfficheHumid():
 def StoringData():
     with connection_DBase()as conn:
         c = conn.cursor()
-        rSQL = ''' INSERT INTO DataHistory (SensorID,Temperature,Humidity,Date)
+        rSQL = ''' INSERT OR IGNORE INTO DataHistory (SensorID,Temperature,Humidity,Date)
                     SELECT SensorID, Temperature,Humidity,Date
                     FROM Capteurs
                     WHERE SensorID = 1 LIMIT 1;'''
