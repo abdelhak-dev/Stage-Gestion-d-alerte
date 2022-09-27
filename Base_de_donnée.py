@@ -3,7 +3,7 @@ import sqlite3
 from sqlite3 import Error
 from pathlib import Path
 from datetime import datetime
-import Email_SENDER
+from Email_Center import SendMail as mail
 databaseName = "Server_room.db"
 now = datetime.now()
 date = now.strftime("%m-%d-%Y, %H:%M:%S")
@@ -259,6 +259,7 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic1, SensorID1, DangerType1, Destination, date))
             conn.commit()
             AlertID += 1
+            mail(AlertTopic1, SensorID1, DangerType1,date,Destination)
             return {"code": 200, "Message": f" Alert '{AlertTopic1}' Repported"}
 
         elif Humidity[2] == "HIGH":  #HUMIDITY
@@ -268,6 +269,7 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2, SensorID2, DangerType2, Destination, date))
             conn.commit()
             AlertID += 1
+            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
             return {"code": 200, "Message": f" Alert '{AlertTopic2}' Repported"}
 
         elif Temperature[2] == "MEDIUM HIGH" and Humidity == "HIGH":    #Temperature AND #HUMIDITY
@@ -275,6 +277,7 @@ def Alert(Destination):
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
                                                     VALUES ('{}','{}','{}','{}','{}','{}');'''
             c.execute(rSQL.format(AlertID, AlertTopic1,SensorID1, DangerType1, Destination, date))
+            mail(AlertTopic1, SensorID1, DangerType1, date, Destination)
             AlertID += 1
 
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
@@ -282,6 +285,7 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2 ,SensorID2, DangerType2, Destination, date))
             AlertID += 1
             conn.commit()
+            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
             return {"code": 200, "Message": f" Alert '{AlertTopic1}' and '{AlertTopic2}' Repported"}
 
         elif Temperature[2] == "HIGH" and Humidity == "HIGH":
@@ -289,6 +293,7 @@ def Alert(Destination):
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
                                                                 VALUES ('{}','{}','{}','{}','{}','{}');'''
             c.execute(rSQL.format(AlertID, AlertTopic1,SensorID1, DangerType1, Destination, date))
+            mail(AlertTopic1, SensorID1, DangerType1, date, Destination)
             AlertID += 1
 
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
@@ -296,17 +301,10 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2, SensorID2, DangerType2, Destination, date))
             AlertID += 1
             conn.commit()
+            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
             return {"code": 200, "Message": f" Alert '{AlertTopic1}' and '{AlertTopic2}' Repported"}
 
 
-#Email Sender
-"""def Emaibox():
-    with connection_DBase()as conn:
-        c = conn.cursor()
-        rSQL = '''SELECT AlertSubject FROM Alerte ORDER BY Date ASC LIMIT 1;'''
-        c.execute(rSQL)
-        catch = c.fetchall()
-        print(catch)"""
 def TempNorm():
     NormTemp = {0: [10, "LOW"],
                 1: [15, "MEDIUM"],
