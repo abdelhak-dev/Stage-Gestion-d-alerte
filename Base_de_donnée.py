@@ -3,7 +3,7 @@ import sqlite3
 from sqlite3 import Error
 from pathlib import Path
 from datetime import datetime
-
+import Email_SENDER
 databaseName = "Server_room.db"
 now = datetime.now()
 date = now.strftime("%m-%d-%Y, %H:%M:%S")
@@ -298,6 +298,15 @@ def Alert(Destination):
             conn.commit()
             return {"code": 200, "Message": f" Alert '{AlertTopic1}' and '{AlertTopic2}' Repported"}
 
+
+#Email Sender
+"""def Emaibox():
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL = '''SELECT AlertSubject FROM Alerte ORDER BY Date ASC LIMIT 1;'''
+        c.execute(rSQL)
+        catch = c.fetchall()
+        print(catch)"""
 def TempNorm():
     NormTemp = {0: [10, "LOW"],
                 1: [15, "MEDIUM"],
