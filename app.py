@@ -88,7 +88,7 @@ async def Get_acces_history():
 ###
 @app.get('/get_alert_history/',tags=["Get Response"])
 async def Get_alert_history():
-    return
+    return add_Alert()
 
 
 

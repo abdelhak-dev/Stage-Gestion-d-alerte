@@ -24,5 +24,4 @@ if __name__ == "__main__":
     #The next commande is to acces api only on localhost "Your computer only",
     ##Run the commande wish is good for you.
     #uvicorn.run("app:app", port=8000, host='127.0.0.3', reload=True)
-
     __test__()

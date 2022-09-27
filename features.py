@@ -34,8 +34,8 @@ def Update_Presence(SensorRef:str,SensorID:int,Presence:str):
 ##
 ## Now we add Alert structure from database
 #Ajouter une alerte avec son type de danger Dnger : high or Fatal or Low
-def add_Alert(AlertSubject: str,SensorID:int, DangerType: str, Destination):
-    return Alert(AlertSubject,SensorID, DangerType, Destination)
+def add_Alert():
+    return Alert(Destination)
 
 #Modifier le type d'alerte : high or Fatal or Low
 def edit_AlertType(Alert:str,AlertDanger:str,Date):

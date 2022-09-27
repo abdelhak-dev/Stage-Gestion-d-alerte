@@ -7,7 +7,7 @@ from Email_Center import SendMail as mail
 databaseName = "Server_room.db"
 now = datetime.now()
 date = now.strftime("%m-%d-%Y, %H:%M:%S")
-
+Destination = "wedigitalpro.php@gmail.com"
 def connection_DBase():
     try:
         conn = sqlite3.connect(databaseName)
@@ -259,8 +259,7 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic1, SensorID1, DangerType1, Destination, date))
             conn.commit()
             AlertID += 1
-            mail(AlertTopic1, SensorID1, DangerType1,date,Destination)
-            return {"code": 200, "Message": f" Alert '{AlertTopic1}' Repported"}
+            return {"code": 200,"Message":mail(AlertTopic1, SensorID1, DangerType1,date,Destination) }
 
         elif Humidity[2] == "HIGH":  #HUMIDITY
             #Envoyer l'alert rsql
@@ -269,15 +268,14 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2, SensorID2, DangerType2, Destination, date))
             conn.commit()
             AlertID += 1
-            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
-            return {"code": 200, "Message": f" Alert '{AlertTopic2}' Repported"}
+            #return {"code": 200, "Message": f" Alert '{AlertTopic2}' Repported"}
+            return {"code": 200, "Message": mail(AlertTopic2, SensorID2, DangerType2, date, Destination)}
 
         elif Temperature[2] == "MEDIUM HIGH" and Humidity == "HIGH":    #Temperature AND #HUMIDITY
             # Envoyer l'alert rsql
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
                                                     VALUES ('{}','{}','{}','{}','{}','{}');'''
             c.execute(rSQL.format(AlertID, AlertTopic1,SensorID1, DangerType1, Destination, date))
-            mail(AlertTopic1, SensorID1, DangerType1, date, Destination)
             AlertID += 1
 
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
@@ -285,15 +283,13 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2 ,SensorID2, DangerType2, Destination, date))
             AlertID += 1
             conn.commit()
-            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
-            return {"code": 200, "Message": f" Alert '{AlertTopic1}' and '{AlertTopic2}' Repported"}
+            return {"code": 200, "Message 1": mail(AlertTopic1, SensorID1, DangerType1, date, Destination),"Message2":mail(AlertTopic2, SensorID2, DangerType2, date, Destination)}
 
         elif Temperature[2] == "HIGH" and Humidity == "HIGH":
             # Envoyer l'alert rsql
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
                                                                 VALUES ('{}','{}','{}','{}','{}','{}');'''
             c.execute(rSQL.format(AlertID, AlertTopic1,SensorID1, DangerType1, Destination, date))
-            mail(AlertTopic1, SensorID1, DangerType1, date, Destination)
             AlertID += 1
 
             rSQL = ''' INSERT INTO Alerte (AlertID,AlertSubject,SensorID,DangerType,DestinationEmail,Date) 
@@ -301,8 +297,7 @@ def Alert(Destination):
             c.execute(rSQL.format(AlertID,AlertTopic2, SensorID2, DangerType2, Destination, date))
             AlertID += 1
             conn.commit()
-            mail(AlertTopic2, SensorID2, DangerType2, date, Destination)
-            return {"code": 200, "Message": f" Alert '{AlertTopic1}' and '{AlertTopic2}' Repported"}
+            return {"code": 200, "Message 1": mail(AlertTopic1, SensorID1, DangerType1, date, Destination),"Message2":mail(AlertTopic2, SensorID2, DangerType2, date, Destination)}
 
 
 def TempNorm():
@@ -310,6 +305,7 @@ def TempNorm():
                 1: [15, "MEDIUM"],
                 2: [25, "MEDIUM HIGH"],
                 3: [32, "HIGH"]}
+    global ScaleTemp
     with connection_DBase() as conn:
         c = conn.cursor()
         rSQL = ''' SELECT SensorId, Temperature From Capteurs '''
@@ -469,6 +465,9 @@ def __test__():
         print("..je crée la base")
         createBase()
     else:
+        StoringData()
+        RoomAcces()
+        Alert(Destination)
         print("..", "la base existe")
 
 if __name__=='__main__':  #'__Base_de_donnée__'
@@ -491,10 +490,10 @@ if __name__=='__main__':  #'__Base_de_donnée__'
 #UpdatePresence("HC-SR501",2,"PresenceDetected")
 
 #Test DataStoring Functions
-StoringData()
+#StoringData()
 
 #Room Presence
-RoomAcces()
+#RoomAcces()
 #Test de l'ajout d'un alerte
 
 #compareT()
@@ -502,7 +501,7 @@ RoomAcces()
 
 #Alert("admin@admin.com") #Si la table DataHistory est vide l'alerte ne peut pas se créer
 
-Alert("admin@admin.com")
+#Alert("admin@admin.com")
 #AlertDangerModif("Temperature","LOW")
 #AlertDangerModif("Temperature","LOW","2022-09-13 09:42:29.947286")
 #AlertSubjectModif("mimi","LOW","2022-09-13 09:42:29.947286")
