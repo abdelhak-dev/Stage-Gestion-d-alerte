@@ -6,7 +6,7 @@ from datetime import datetime
 from Email_Center import SendMail as mail
 databaseName = "Server_room.db"
 now = datetime.now()
-date = now.strftime("%m-%d-%Y, %H:%M:%S")
+date = now.strftime("%m-%d-%Y, %H:%M")
 Destination = "wedigitalpro.php@gmail.com"
 def connection_DBase():
     try:
