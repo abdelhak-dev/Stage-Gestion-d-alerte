@@ -4,7 +4,7 @@ from sqlite3 import Error
 from pathlib import Path
 from datetime import datetime
 from Email_Center import SendMail as mail
-databaseName = "Server_room.db"
+databaseName = "/app/Server_room.db"
 now = datetime.now()
 date = now.strftime("%m-%d-%Y, %H:%M")
 Destination = "wedigitalpro.php@gmail.com"
@@ -432,6 +432,18 @@ def AfficheHumid():
         c.execute(rSQL)
         Humid = c.fetchone()
     return Humid[0]
+
+def Room__State():
+    with connection_DBase()as conn:
+        c = conn.cursor()
+        rSQL = ''' SELECT Temperature FROM Capteurs;'''
+        c.execute(rSQL)
+        Temp = c.fetchone()
+
+        rSQL = ''' SELECT Humidity FROM Capteurs ;'''
+        c.execute(rSQL)
+        Humid = c.fetchone()
+    return Temp[0],Humid[0]
 
 
 #
