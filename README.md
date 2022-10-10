@@ -8,7 +8,7 @@ This project hold 4 parts :
   
   
   ![](images/Arch.png)
-    ![](images/dd1.png)
+   
   
   ## Python Modules and Framework :
   
@@ -22,7 +22,7 @@ This project hold 4 parts :
   1) $ sudo docker-compose build
   2) $ sudo docker-compose up
  ```
-## API Queries
+## Main API Queries
 
 To consult the API documentation tape 127.0.0.3:8000/docs
 
@@ -39,3 +39,5 @@ To consult the API documentation tape 127.0.0.3:8000/docs
     
 - To Check the Humidity :
     /AfficheHumid/
+
+ ![](images/dd1.png)
