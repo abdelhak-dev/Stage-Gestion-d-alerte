@@ -1,4 +1,4 @@
-# Temperature and Humidity Monitoring & Alerting using Grafana 
+# ServerRoom : Temperature and Humidity Monitoring & Alerting using Grafana 
 
 This project hold 4 parts :
   - Temperature and Humidity Gathering using Arduino Yun From 3 Sensors DHT11 and PIR Sensor.
