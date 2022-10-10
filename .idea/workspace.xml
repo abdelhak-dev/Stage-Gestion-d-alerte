@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fd5c28ee-e747-4b53-9341-f61453f270cb" name="Changes" comment="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server_room.db" beforeDir="false" afterPath="$PROJECT_DIR$/Server_room.db" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Abdelhak &lt;anwa.abdel.06@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2EfAzy30NoZzFGa2iZvpvysxuVx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Abdelhak/Desktop/Tape_me/Curent_Project/Team-11-master/Team-11-master/Cluster's/API_Version_Final/Base_de_donnée.py&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Docker&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Python.Base_de_donnée (1)">
+    <configuration name="Base_de_donnée (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Base_de_donnée.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Dashboard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Dashboard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Email_Center (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Email_Center.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Email_Center" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\Abdelhak\Desktop\Tape_me\Curent_Project\Stage Gestion d'alerte\Email_Center.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Email_SENDER" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Email_SENDER.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Stage Gestion d'alerte" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Base_de_donnée (1)" />
+        <item itemvalue="Python.Email_Center (1)" />
+        <item itemvalue="Python.Email_Center" />
+        <item itemvalue="Python.Email_SENDER" />
+        <item itemvalue="Python.Dashboard" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fd5c28ee-e747-4b53-9341-f61453f270cb" name="Changes" comment="" />
+      <created>1662976530407</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1662976530407</updated>
+    </task>
+    <task id="LOCAL-00001" summary="First Version of DB and API">
+      <created>1663229140024</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663229140024</updated>
+    </task>
+    <task id="LOCAL-00002" summary="First Version of DB and API">
+      <created>1663231783196</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663231783196</updated>
+    </task>
+    <task id="LOCAL-00003" summary="First Version of DB and API">
+      <created>1663231974171</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663231974171</updated>
+    </task>
+    <task id="LOCAL-00004" summary="First Version of DB and API">
+      <created>1663233012169</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1663233012169</updated>
+    </task>
+    <task id="LOCAL-00005" summary="First Version of DB and API">
+      <created>1663233671864</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1663233671864</updated>
+    </task>
+    <task id="LOCAL-00006" summary="First Version of DB and API Docs">
+      <created>1663235748126</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1663235748126</updated>
+    </task>
+    <task id="LOCAL-00007" summary="First Version of DB and API Docs">
+      <created>1663239831896</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1663239831896</updated>
+    </task>
+    <task id="LOCAL-00008" summary="First Version of DB and API Docs">
+      <created>1663247239768</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1663247239768</updated>
+    </task>
+    <task id="LOCAL-00009" summary="First Version of DB and API Docs">
+      <created>1663252168235</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1663252168235</updated>
+    </task>
+    <task id="LOCAL-00010" summary="First Version of DB and API Docs">
+      <created>1663252455997</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1663252455997</updated>
+    </task>
+    <task id="LOCAL-00011" summary="First Version of DB and API Docs">
+      <created>1663252525565</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1663252525565</updated>
+    </task>
+    <task id="LOCAL-00012" summary="First Version of DB and API Docs&#10;FIXED : SET_Temperature and SET_Humidity and SET SensorState.">
+      <created>1663252537116</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1663252537116</updated>
+    </task>
+    <task id="LOCAL-00013" summary="First Version of DB and API Docs&#10;FIXED : SET_Temperature and SET_Humidity and SET SensorState.&#10;STILL Need to fix AddCapteur pour updater la saisie SensorID">
+      <created>1663253782065</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1663253782065</updated>
+    </task>
+    <task id="LOCAL-00014" summary="First Version of DB and API Docs&#10;FIXED : AddCapteur()">
+      <created>1663319847602</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1663319847602</updated>
+    </task>
+    <task id="LOCAL-00015" summary="First Version of DB and API Docs&#10;FIXED : AddCapteur()">
+      <created>1663320256647</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1663320256647</updated>
+    </task>
+    <task id="LOCAL-00016" summary="First Version of DB and API Docs&#10;FIXED : AddCapteur()">
+      <created>1663320347860</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1663320347860</updated>
+    </task>
+    <task id="LOCAL-00017" summary="First Version of DB and API Docs&#10;FIXED From API: AddCapteur / Update Temp&amp;Humid">
+      <created>1663666891181</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1663666891181</updated>
+    </task>
+    <task id="LOCAL-00018" summary="First Version of DB and API Docs&#10;FIXED From API Arduino Functions: AddCapteur / Update Temp&amp;Humid / Update Presence">
+      <created>1663671707321</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1663671707321</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Version Send From Arduino Yùn To API/DB&#10;Need to test ALert">
+      <created>1663682651903</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1663682651903</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Version Send From Arduino Yùn To API/DB&#10;Need to test ALert">
+      <created>1663688339172</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1663688339172</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoomIn (Historique d'acces à la salle)&#10;Need to test ALert">
+      <created>1663747780149</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1663747780149</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoomIn (Historique d'acces à la salle)&#10;Need to test ALert &amp; Compare Temp and Humidity Value">
+      <created>1663773633403</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1663773633403</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoom (Historique d'acces à la salle), DataHistory (Stockage des données)&#10;FIXED : RoomAcces():Recording Data - Changing HourFormat - AffichageFunctions from storage&#10;        CompareFunction with Temp and Humidity Threshold">
+      <created>1663841996166</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1663841996166</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoom (Historique d'acces à la salle), DataHistory (Stockage des données)&#10;FIXED : RoomAcces():Recording Data - Changing HourFormat - AffichageFunctions from storage&#10;        CompareFunction with Temp and Humidity Threshold">
+      <created>1663842050765</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1663842050765</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoom (Historique d'acces à la salle), DataHistory (Stockage des données)&#10;FIXED : RoomAcces():Recording Data - Changing HourFormat - AffichageFunctions from storage&#10;        CompareFunction with Temp and Humidity Threshold">
+      <created>1663842440411</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1663842440411</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoom (Historique d'acces à la salle), DataHistory (Stockage des données)&#10;FIXED : RoomAcces():Recording Data - Changing HourFormat - AffichageFunctions from storage&#10;        CompareFunction with Temp and Humidity Threshold">
+      <created>1663843105123</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1663843105123</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1663844762328</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1663844762328</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1663857196763</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1663857196763</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1663930555507</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1663930555507</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664203166521</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1664203166521</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664203409399</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1664203409399</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664205190187</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1664205190187</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664206144409</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1664206144409</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664229695700</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1664229695700</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id">
+      <created>1664287785296</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1664287785296</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id&#10;Email added">
+      <created>1664287883904</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1664287883904</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email">
+      <created>1664290515806</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1664290515806</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email">
+      <created>1664292670229</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1664292670229</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email">
+      <created>1664309081347</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1664309081347</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First Version of DB and API" />
+    <MESSAGE value="First Version of DB and API Docs" />
+    <MESSAGE value="First Version of DB and API Docs&#10;FIXED : SET_Temperature and SET_Humidity and SET SensorState." />
+    <MESSAGE value="First Version of DB and API Docs&#10;FIXED : SET_Temperature and SET_Humidity and SET SensorState.&#10;STILL Need to fix AddCapteur pour updater la saisie SensorID" />
+    <MESSAGE value="First Version of DB and API Docs&#10;FIXED : AddCapteur()" />
+    <MESSAGE value="First Version of DB and API Docs&#10;FIXED From API: AddCapteur / Update Temp&amp;Humid" />
+    <MESSAGE value="First Version of DB and API Docs&#10;FIXED From API Arduino Functions: AddCapteur / Update Temp&amp;Humid / Update Presence" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB&#10;Need to test ALert" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoomIn (Historique d'acces à la salle)&#10;Need to test ALert" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoomIn (Historique d'acces à la salle)&#10;Need to test ALert &amp; Compare Temp and Humidity Value" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB&#10;New Table: HistoryRoom (Historique d'acces à la salle), DataHistory (Stockage des données)&#10;FIXED : RoomAcces():Recording Data - Changing HourFormat - AffichageFunctions from storage&#10;        CompareFunction with Temp and Humidity Threshold" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB AND Store Data &#10;Need to Fix : Add Only one Sensor with same id&#10;Email added" />
+    <MESSAGE value="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version Send From Arduino Yùn To API/DB AND Store AND Alert Email" />
+  </component>
+</project>
