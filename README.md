@@ -6,6 +6,10 @@ This project hold 4 parts :
   - Display Temperature & Humidity & Date & Presence in the Server Room in Grafana Dashboard.
   - Alerting by Email The Temperature and Humidity 
   
+  
+  ![](images/Arch.png)
+    ![](images/dd1.png)
+  
   ## Python Modules and Framework :
   
   - Fastapi
