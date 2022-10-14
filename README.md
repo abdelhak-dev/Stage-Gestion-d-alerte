@@ -1,10 +1,14 @@
-# Temperature and Humidity Monitoring & Alerting using Grafana 
+# ServerRoom : Temperature and Humidity Monitoring & Alerting using Grafana 
 
 This project hold 4 parts :
   - Temperature and Humidity Gathering using Arduino Yun From 3 Sensors DHT11 and PIR Sensor.
   - Sending Informations to The Raspberry Pi Server using RestAPI.
   - Display Temperature & Humidity & Date & Presence in the Server Room in Grafana Dashboard.
   - Alerting by Email The Temperature and Humidity 
+  
+  
+  ![](images/Arch.png)
+   
   
   ## Python Modules and Framework :
   
@@ -18,7 +22,7 @@ This project hold 4 parts :
   1) $ sudo docker-compose build
   2) $ sudo docker-compose up
  ```
-## API Queries
+## Main API Queries
 
 To consult the API documentation tape 127.0.0.3:8000/docs
 
@@ -35,3 +39,5 @@ To consult the API documentation tape 127.0.0.3:8000/docs
     
 - To Check the Humidity :
     /AfficheHumid/
+
+ ![](images/dd1.png)
